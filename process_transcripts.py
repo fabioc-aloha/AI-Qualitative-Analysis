@@ -1,3 +1,29 @@
+"""
+MCEM Interview Processing Script
+
+This script processes customer interview transcripts using Azure OpenAI's GPT-4 model to generate
+structured analysis reports based on Microsoft's Customer Engagement Model (MCEM) framework.
+It handles both small and large transcripts through intelligent chunking and generates output
+in both Markdown and Word document formats.
+
+Requirements:
+    - Python 3.x
+    - Azure OpenAI API access
+    - Environment variables set in .env file:
+        - AZURE_OPENAI_API_KEY
+        - AZURE_OPENAI_API_VERSION
+        - AZURE_OPENAI_ENDPOINT
+        - AZURE_OPENAI_DEPLOYMENT
+    - Pandoc installed for Word document conversion
+    - Required packages: openai, python-dotenv, tiktoken
+
+Usage:
+    1. Place interview transcripts in the 'transcripts/' directory as .txt files
+    2. Ensure AnalysisTemplate.txt exists with the desired template
+    3. Run the script: python process_transcripts.py
+    4. Generated analyses will be in the 'reports/' directory
+"""
+
 from typing import List
 import os
 from dotenv import load_dotenv
@@ -19,7 +45,23 @@ def get_client():
     )
 
 def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI) -> str:
-    """Process a transcript file, chunking only if exceeds safe token limit"""
+    """
+    Process a single transcript file and generate an analysis using Azure OpenAI.
+    
+    If the transcript exceeds the safe token limit, it will be processed in chunks
+    using process_large_transcript().
+    
+    Args:
+        transcript_path (Path): Path to the transcript file
+        template (str): Analysis template to use
+        client (AzureOpenAI): Initialized Azure OpenAI client
+    
+    Returns:
+        str: Generated analysis text, or None if processing fails
+        
+    Raises:
+        Exception: If there's an error during API communication or text processing
+    """
     with open(transcript_path, "r", encoding="utf-8") as f:
         transcript = f.read()
         company_name = transcript_path.stem.replace(" Transcription", "")
@@ -83,7 +125,27 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
         return None
 
 def process_large_transcript(transcript: str, template: str, client: AzureOpenAI) -> str:
-    """Handle extremely large transcripts that exceed token limits"""
+    """
+    Handle large transcripts by breaking them into chunks for processing.
+    
+    This function:
+    1. Splits the transcript into chunks based on token count
+    2. Processes each chunk separately
+    3. Consolidates the results into a single coherent analysis
+    
+    Args:
+        transcript (str): The full transcript text
+        template (str): Analysis template to use
+        client (AzureOpenAI): Initialized Azure OpenAI client
+    
+    Returns:
+        str: Consolidated analysis text, or None if processing fails
+        
+    Notes:
+        - Uses a chunk size of 80,000 tokens
+        - Each chunk is processed independently with the MCEM framework
+        - Results are consolidated with a final API call if multiple chunks exist
+    """
     chunk_size = 80000
     MAX_COMPLETION_TOKENS = 16000
     encoding = tiktoken.get_encoding("cl100k_base")
@@ -146,6 +208,20 @@ def process_large_transcript(transcript: str, template: str, client: AzureOpenAI
     return results[0] if results else None
 
 def main():
+    """
+    Main execution function that:
+    1. Loads environment variables
+    2. Initializes Azure OpenAI client
+    3. Creates output directory if needed
+    4. Processes all .txt files in the transcripts directory
+    5. Generates both markdown and Word document outputs
+    
+    Environment Requirements:
+        - .env file with Azure OpenAI credentials
+        - 'transcripts' directory with .txt files
+        - 'AnalysisTemplate.txt' file
+        - Pandoc installed for Word conversion
+    """
     load_dotenv()
     client = get_client()
     

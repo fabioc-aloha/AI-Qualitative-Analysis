@@ -15,16 +15,16 @@ An automated tool for processing and analyzing customer interview transcripts us
   - Stage-by-stage MCEM analysis
   - Strategic recommendations
   - Detailed feedback analysis
+  - Role-based insights and action items
+  - Sentiment analysis and mood indicators
+  - Key metrics and success indicators
 
 ## Prerequisites
 
 - Python 3.x
 - Azure OpenAI API access
 - Pandoc (for Word document conversion)
-- Required Python packages:
-  - openai
-  - python-dotenv
-  - tiktoken
+- Required Python packages (see requirements.txt)
 
 ## Setup
 
@@ -38,7 +38,7 @@ An automated tool for processing and analyzing customer interview transcripts us
    ```
 3. Install required packages:
    ```bash
-   pip install openai python-dotenv tiktoken
+   pip install -r requirements.txt
    ```
 
 ## Usage
@@ -55,6 +55,7 @@ An automated tool for processing and analyzing customer interview transcripts us
 ```
 ├── process_transcripts.py    # Main processing script
 ├── AnalysisTemplate.txt     # Template for analysis reports
+├── requirements.txt         # Python package requirements
 ├── .env                     # Configuration file (not in repo)
 ├── transcripts/            # Input directory for transcripts
 └── reports/               # Output directory for analyses
@@ -66,11 +67,22 @@ The generated analysis includes:
 - Executive Summary
 - Company Background
 - Interview Details
-- MCEM Stage Analysis
+- MCEM Stage Analysis (Listen & Consult through Manage & Optimize)
 - Strategic Recommendations
 - Additional Customer Feedback
-- Comprehensive Summary Table
+- Role-based Summary Table with Action Items
+- Sentiment Analysis and Key Metrics
+
+## Best Practices
+
+- Keep transcripts in plain text format (.txt)
+- One transcript per interview session
+- Use consistent naming conventions for transcript files
+- Review generated reports for sensitive information before sharing
+- Regular backups of analysis outputs recommended
 
 ## Note
 
-Ensure sensitive information is properly handled. The `.env` file and customer transcripts are excluded from version control by default.
+- The `.env` file and customer transcripts are excluded from version control by default
+- Ensure compliance with data privacy requirements when handling customer information
+- Regular updates to the Azure OpenAI API may require configuration adjustments
