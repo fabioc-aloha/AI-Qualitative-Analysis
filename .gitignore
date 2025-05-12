@@ -1,6 +1,9 @@
 .env
 __pycache__/
 *.pyc
-reports/
-transcripts/
+# Keep reports/ and transcripts/ folders and their README.md, but ignore all other contents
+reports/*
+!reports/README.md
+transcripts/*
+!transcripts/README.md
 .vscode/
