@@ -1,10 +1,56 @@
+# MCEM Interview Analysis Template (Improved)
+# Last updated: 2025-05-12
+#
+# This template is designed to maximize completeness, accuracy, and clarity in automated interview transcript analysis.
+#
+# Key features and usage notes:
+# - All direct customer quotes, ratings, and recommendations must be included verbatim and attributed.
+# - Line number references are no longer used; instead, provide a brief, descriptive context for each quote.
+# - Sections should be written in clear, descriptive paragraphs, with bullets reserved for lists of quotes, recommendations, or summary tables.
+# - Narrative flow and context are emphasized to improve readability for non-technical stakeholders.
+# - Use the provided checklists and self-checks to ensure no relevant content is omitted.
+# - The 'Qualitative Evaluation of Report' section at the end is used as a decision point for report readiness.
+#
+# For further guidance, see DECISIONS.md and learnings.md.
+
+# COMMON OMISSIONS CHECKLIST (Complete before starting the report)
+- [ ] All competitor comparisons included
+- [ ] All context for ratings provided
+- [ ] All changes in sentiment/confidence over time noted
+- [ ] All product/feature feedback included
+- [ ] All support/communication experiences detailed
+- [ ] All vendor/partner interactions detailed
+- [ ] All regulatory, compliance, and competitive pressures noted
+- [ ] All missed or unclear points listed
+
+# FREQUENTLY MISSED QUOTES & CONTEXT (Complete for every report)
+- [ ] Quotes about regular catch-ups and meeting frequency
+- [ ] Quotes about direct communication with Microsoft and/or Comp Now
+- [ ] Quotes about changes in representatives and their impact
+- [ ] Quotes about product targeting and suitability for education
+- [ ] Quotes about AI implementation support and challenges
+- [ ] Quotes about pricing, value for money, and comparisons with competitors
+- [ ] Quotes about post-COVID communication and support changes
+- [ ] Quotes about specific product features (e.g., Surface Book 3, keyboard, cameras)
+- [ ] Quotes about deal registry frustrations
+- [ ] Quotes about explicit recommendations for Microsoft
+- [ ] Quotes about overall sentiment, satisfaction, or uncertainty
+
+# TRANSCRIPT COVERAGE TABLE
+| Transcript Statement/Quote | Section Included In |
+|---------------------------|---------------------|
+|                           |                     |
+| (Add a row for every major statement/quote) |
+
 # Interview Analysis – [Participant Name], [Company Name]
+
+> **IMPORTANT:** For every section below, include all direct customer quotes, ratings, and recommendations verbatim and attributed. **DO NOT OMIT** any relevant quote, rating, or customer statement. If unsure, include it in 'Missed or Unclear Points'. If a section cannot be filled, state "No data provided in transcript." Use clear Markdown formatting, bullet points, and tables for readability. Ensure every section and checklist item is addressed before completing the report.
 
 **Company Background**
 > *[Insert concise overview of the customer’s organization (industry, size, strategic priorities) and why this engagement matters to them.]*
 
 **Executive Summary**
-> Summarize the purpose of the interview, the top three insights or themes, and preview high-level recommendations. Use bullet points for clarity.
+> Summarize the purpose of the interview, the top three insights or themes, and preview high-level recommendations. Use bullet points for clarity. Include any direct customer statements about Microsoft’s standing among competitors.
 
 ---
 
@@ -16,14 +62,33 @@
 ---
 
 ## Direct Customer Quotes (Verbatim)
-- List every direct quote from the customer that provides insight, feedback, or a rating. Use Markdown blockquotes (>) and attribute each quote to the speaker. Do not paraphrase or omit any quote that provides context, sentiment, or a specific request.
+**DO NOT OMIT any relevant quote.**
+- List every direct quote from the customer that provides insight, feedback, or a rating. Use this format:
+  > **[Speaker Name]:** "Exact quote here."
+- For each quote, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
+- Include all competitor comparisons and statements about Microsoft’s standing among vendors.
+- Include all statements about changes in sentiment or confidence over time, with timeframes if mentioned.
+- Include all statements about product features, support, communication, and vendor/partner interactions.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ---
 
 ## Customer Ratings & Metrics (Verbatim)
-- Enumerate all customer-provided ratings, scores, or metrics. For each, specify the context (e.g., "Sales Engagement: 4/5").
+**DO NOT OMIT any relevant rating or metric.**
+- Enumerate all customer-provided ratings, scores, or metrics. For each, specify the context (e.g., "Sales Engagement: 4/5") and provide the direct quote and context for every rating or score, not just the number.
+- For each rating, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
 - If the customer compares Microsoft to other vendors, include the exact comparison and rating.
-- If the customer provides a breakdown (e.g., sales, post-sales, operational), list each separately.
+- If the customer provides a breakdown (e.g., sales, post-sales, operational), list each separately and provide the context for each.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## Customer Recommendations (Verbatim)
+**DO NOT OMIT any explicit customer recommendation.**
+- List all explicit recommendations made by the customer, verbatim and attributed.
+- For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
+- Separate these from analyst-generated recommendations.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ---
 
@@ -32,24 +97,67 @@
 - Describe the customer’s initial challenges, strategic drivers, and objectives.
 - Include direct quotes and ratings relevant to this stage.
 - List any pain points or early opportunities.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ### 2. Inspire & Design
 - Summarize how solution ideas were received and refined.
 - Include customer reactions, enthusiasm, or hesitation (with quotes).
 - Note design considerations and integration challenges.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ### 3. Empower & Achieve
 - Detail PoC discussions, success criteria, and stakeholder buy-in.
 - Include quotes and highlight any roadblocks (budget, timeline, technical constraints).
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ### 4. Realize Value
 - Describe deployment outcomes, adoption metrics, and customer feedback.
 - Include feedback on training, support, and change management.
 - Note any unexpected challenges.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ### 5. Manage & Optimize
 - Summarize long-term plans, governance, and optimization needs.
 - Include quotes about appetite for partnership, new capabilities, and requested playbooks.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## Representative Changes & Communication
+- Detail all changes in Microsoft or vendor representatives, including names if mentioned.
+- Include all quotes about the impact of these changes on support, satisfaction, and confidence.
+- Explicitly mention any confusion or uncertainty about current contacts.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## Pricing & Value Perception
+- List all statements and quotes about pricing increases, value for money, and comparisons with other vendors.
+- Include the impact of pricing on purchasing decisions and satisfaction.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## AI & Emerging Tech Support
+- List all statements and quotes about support for AI and emerging technologies.
+- Include both positive and negative feedback, and any explicit requests for more guidance or expertise.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## Product Targeting & Suitability
+- List all statements and quotes about which products are suitable for which audiences (e.g., education sector), and any confusion or requests for guidance.
+- Include feedback on product features, design changes, and suitability for the customer's needs.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## Contradictions, Nuanced Feedback & Mixed Sentiments (Verbatim)
+**Explicitly list all contradictions, nuanced feedback, or mixed sentiments from the transcript.**
+- For each, provide the direct quote(s), attribute the speaker, and explain the contradiction or nuance.
+- Include context for each (e.g., section, topic, or line reference).
+- If no contradictions or nuanced feedback are present, state "No contradictions or nuanced feedback found in transcript."
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ---
 
@@ -57,13 +165,16 @@
 - Synthesize cross-stage themes, misalignments, and leverage points.
 - Explicitly call out any gaps between customer expectations and Microsoft’s delivery.
 - Highlight any regulatory, compliance, or competitive pressures mentioned by the customer.
+- Call out any contradictions, nuanced feedback, or mixed sentiments, with direct quotes.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ---
 
-## Recommendations
+## Analyst Recommendations
 - List 3–5 actionable recommendations, using bullet points.
 - For each, reference the specific customer quote, rating, or pain point that justifies the recommendation.
-- If the customer made explicit recommendations, include them verbatim and attribute them.
+- Clearly separate analyst-generated recommendations from customer-suggested ones.
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
 
 ---
 
@@ -82,25 +193,73 @@
 
 ## Additional Customer Feedback and Topics
 * **Sentiment & Mood:**
-  - Summarize the overall tone, including enthusiasm, frustration, trust, or concerns. Use direct quotes where possible.
+  - Summarize the overall tone, including enthusiasm, frustration, trust, or concerns. Use direct quotes where possible. Explicitly mention any changes in sentiment or confidence over time.
+  - For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
 * **Other Topics:**
   - List product-specific asks, feature requests, or organizational/process concerns.
   - Include numeric ratings or benchmarks.
+  - For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
 * **Open Questions & Parking Lot Items:**
   - List follow-up questions or deferred topics.
   - Note any regulatory or compliance issues raised.
+  - For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
+* **Vendor/Partner Interactions:**
+  - Detail and quote all interactions with partners, vendors, or third parties (e.g., Comp Now).
+  - For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
+* **Product/Feature Feedback:**
+  - List specific product features praised or criticized, with direct quotes.
+  - For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
+* **Communication and Support Channels:**
+  - Provide explicit details and quotes about support experiences, communication channels, and any confusion or changes in personnel.
+  - For each, add a sub-bullet: **Transcript Reference:** [Briefly describe the context or situation in which the quote was made, rather than using line numbers.]
+- **Section Completeness Self-Check:** Have all relevant transcript statements for this section been included above? If not, list them below or move them to 'Missed or Unclear Points'.
+
+---
+
+## Missed or Unclear Points
+- List any transcript statements that were ambiguous, unclear, or could not be confidently categorized. Do not omit any statement from the transcript. For each, add a reason for omission or uncertainty.
+
+---
+
+## Final Omissions Review
+- List any transcript statements not included elsewhere, with a reason for omission or uncertainty.
+
+---
+
+## Summary of Changes from Transcript
+- Summarize any paraphrasing, summarization, or transformation of transcript content, and justify why it was done (should be rare).
+
+---
+
+## Qualitative Evaluation of Report
+- Provide a brief qualitative assessment of the overall report quality, completeness, and fidelity to the transcript.
+- Highlight strengths (e.g., thoroughness, clarity, inclusion of all key quotes and context) and any remaining minor gaps or areas for improvement.
+- Explicitly state whether the report is "good enough" for delivery or if critical issues remain that require further revision.
+- Use this section as a decision point in the iteration process.
 
 ---
 
 ## Checklist for Report Completeness
 - [ ] All direct customer quotes included and attributed
-- [ ] All customer-provided ratings and metrics listed
+- [ ] All customer-provided ratings and metrics listed, with context and direct quotes
 - [ ] All recommendations justified by transcript evidence
 - [ ] All explicit customer recommendations included verbatim
 - [ ] All MCEM stages addressed
 - [ ] All pain points and positive feedback captured
 - [ ] All summary tables and sections filled
 - [ ] All regulatory, compliance, and competitive pressures noted
+- [ ] All competitor comparisons included
+- [ ] All context for ratings provided
+- [ ] All changes in sentiment/confidence over time noted
+- [ ] All product/feature feedback included
+- [ ] All support/communication experiences detailed
+- [ ] All vendor/partner interactions detailed
+- [ ] All missed or unclear points listed
+- [ ] All common omissions checklist items checked
+- [ ] Transcript coverage table completed
+- [ ] Section completeness self-checks completed after every section
+- [ ] Final omissions review completed
+- [ ] Summary of changes from transcript completed
 
 ---
 
@@ -111,3 +270,11 @@
 > - Use clear Markdown formatting, bullet points, and tables for readability.
 > - Ensure every section and checklist item is addressed before completing the report.
 > - If the transcript contains regulatory, compliance, or competitive pressures, highlight them in the appropriate section.
+> - Explicitly call out contradictions, nuanced feedback, or mixed sentiments, with direct quotes.
+> - Add a section for any missed or unclear points from the transcript.
+> - Complete the transcript coverage table and all self-checks.
+> - Complete the final omissions review and summary of changes from transcript.
+
+> **Formatting Guidance:**
+> - Write each section in clear, descriptive paragraphs rather than just bullet points. Use bullets only for lists of quotes, recommendations, or summary tables.
+> - Ensure the narrative flows logically and provides context for each quote or insight, making the report easy to read and understand for non-technical stakeholders.

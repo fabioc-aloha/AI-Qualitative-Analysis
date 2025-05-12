@@ -51,6 +51,25 @@
 
 ---
 
+## Recent Decisions & Updates (2025-05-12)
+
+- The analysis template is now continuously optimized using the generated output to improve future analyses.
+- The main docstring and documentation have been updated to reflect this optimization process.
+
+## 2025-05-12: Template Refinement – Contradictions Section
+- Added a dedicated section to the analysis template for "Contradictions, Nuanced Feedback & Mixed Sentiments (Verbatim)".
+- This section requires explicit listing of all contradictions, nuanced feedback, or mixed sentiments from the transcript, with direct quotes, attribution, and context.
+- The change was made to address persistent omissions of nuanced or contradictory content in complex transcripts, as identified in validation logs.
+- The goal is to further reduce the number of LLM validation/revision iterations required for challenging transcripts by making these requirements explicit and auditable.
+
+## 2025-05-12: Template Simplification and Narrative Guidance
+- Removed line number references for transcript quotes; now require a brief, descriptive context for each quote instead.
+- Added explicit formatting guidance: sections should be written in clear, descriptive paragraphs, with bullets reserved for lists of quotes, recommendations, or summary tables.
+- Emphasized narrative flow and context to improve readability and usability for non-technical stakeholders.
+- These changes address concerns about template complexity and LLM/human usability, aiming for a balance between completeness and clarity.
+
+---
+
 ## To Do: Recommendations for Improvement
 
 - [x] Replace print statements with the `logging` module for better diagnostics and log levels.
@@ -61,8 +80,9 @@
 - [x] Improve error handling and user feedback throughout the script.
 - [x] Document all functions with clear docstrings and type hints.
 - [x] Implement configuration file support (YAML/JSON) for advanced settings.
+- [x] The analysis template is optimized using the output (continuous improvement loop).
 - [ ] Enhance output formatting (e.g., add tables, summary sections, or visualizations).
-- [ ] Allow selection of different analysis templates via  config.
+- [ ] Allow selection of different analysis templates via config.
 - [ ] Add language detection and support for multilingual transcripts.
 - [ ] Integrate output quality checks (e.g., grammar, completeness, MCEM compliance).
 - [ ] Provide a summary report aggregating insights across all processed transcripts.
