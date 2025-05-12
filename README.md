@@ -9,6 +9,7 @@ An automated tool for processing and analyzing customer interview transcripts us
 - Handles large transcripts through intelligent chunking
 - Applies MCEM framework to organize insights and recommendations
 - Preserves direct customer quotes and specific metrics
+- Continuously optimizes the analysis template using the generated output to improve future analyses
 - Generates comprehensive analysis including:
   - Company background and context
   - Executive summary
@@ -44,11 +45,16 @@ An automated tool for processing and analyzing customer interview transcripts us
 ## Usage
 
 1. Place interview transcripts in the `transcripts/` directory as .txt files
-2. Run the script:
+2. Ensure your configuration is set in `config.yaml` (environment variables in `.env` are expanded automatically)
+3. Run the script:
    ```bash
    python process_transcripts.py
    ```
-3. Find generated analyses in the `reports/` directory in both .md and .docx formats
+4. Find generated analyses in the `reports/` directory in both `.md` (Markdown) and `.docx` (Word) formats
+
+- The script validates required Azure OpenAI environment variables and checks for Pandoc installation before processing.
+- Both Markdown and Word document outputs are generated for each transcript.
+- The script loads configuration from `config.yaml` and uses the template specified by `template_path` (defaults to `AnalysisTemplate-Improved.txt` if present).
 
 ## Configuration File Support
 
@@ -72,13 +78,14 @@ processing:
   max_completion_tokens: 16000
   language_detection: false
   output_format: ["md", "docx"]
-  template_path: "AnalysisTemplate.txt"
+  template_path: "AnalysisTemplate-Improved.txt"
   summary_report: true
   dry_run: false
   log_to_file: false
   log_file_path: "logs/processing.log"
-  analysis_template: "default"
+  analysis_template: "improved"
   available_templates:
+    improved: "AnalysisTemplate-Improved.txt"
     default: "AnalysisTemplate.txt"
 ```
 
@@ -107,6 +114,7 @@ The generated analysis includes:
 
 ## Best Practices
 
+- The script follows Azure best practices for security, error handling, and configuration management.
 - Keep transcripts in plain text format (.txt)
 - One transcript per interview session
 - Use consistent naming conventions for transcript files

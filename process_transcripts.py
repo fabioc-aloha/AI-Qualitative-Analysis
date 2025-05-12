@@ -6,6 +6,8 @@ structured analysis reports based on Microsoft's Customer Engagement Model (MCEM
 It handles both small and large transcripts through intelligent chunking and generates output
 in both Markdown and Word document formats.
 
+Additionally, the analysis template is continuously optimized using the generated output to improve future analyses.
+
 Requirements:
     - Python 3.x
     - Azure OpenAI API access
