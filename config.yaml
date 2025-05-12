@@ -1,0 +1,23 @@
+# config.yaml
+# Example configuration file for MCEM Interview Processing
+
+azure:
+  api_key: "${AZURE_OPENAI_API_KEY}"
+  api_version: "${AZURE_OPENAI_API_VERSION}"
+  endpoint: "${AZURE_OPENAI_ENDPOINT}"
+  deployment: "${AZURE_OPENAI_DEPLOYMENT}"
+
+processing:
+  chunk_size: 80000
+  max_completion_tokens: 16000
+  language_detection: false
+  output_format: ["md", "docx"]
+  template_path: "AnalysisTemplate.txt"
+  summary_report: true
+  dry_run: false
+  log_to_file: false
+  log_file_path: "logs/processing.log"
+  analysis_template: "default"
+  available_templates:
+    default: "AnalysisTemplate.txt"
+    # Add more templates here

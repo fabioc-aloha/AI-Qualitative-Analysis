@@ -50,6 +50,38 @@ An automated tool for processing and analyzing customer interview transcripts us
    ```
 3. Find generated analyses in the `reports/` directory in both .md and .docx formats
 
+## Configuration File Support
+
+This project now supports advanced configuration via a YAML file (`config.yaml`).
+
+- All major settings (Azure credentials, chunk size, output formats, template selection, etc.) can be managed in `config.yaml`.
+- Environment variables in the config (e.g., `${AZURE_OPENAI_API_KEY}`) are automatically expanded.
+- The main script loads and applies these settings at runtime.
+- See the provided `config.yaml` for an example and available options.
+
+### Example `config.yaml`
+
+```yaml
+azure:
+  api_key: "${AZURE_OPENAI_API_KEY}"
+  api_version: "${AZURE_OPENAI_API_VERSION}"
+  endpoint: "${AZURE_OPENAI_ENDPOINT}"
+  deployment: "${AZURE_OPENAI_DEPLOYMENT}"
+processing:
+  chunk_size: 80000
+  max_completion_tokens: 16000
+  language_detection: false
+  output_format: ["md", "docx"]
+  template_path: "AnalysisTemplate.txt"
+  summary_report: true
+  dry_run: false
+  log_to_file: false
+  log_file_path: "logs/processing.log"
+  analysis_template: "default"
+  available_templates:
+    default: "AnalysisTemplate.txt"
+```
+
 ## Project Structure
 
 ```

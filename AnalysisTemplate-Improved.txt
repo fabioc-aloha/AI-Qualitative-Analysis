@@ -1,0 +1,113 @@
+# Interview Analysis – [Participant Name], [Company Name]
+
+**Company Background**
+> *[Insert concise overview of the customer’s organization (industry, size, strategic priorities) and why this engagement matters to them.]*
+
+**Executive Summary**
+> Summarize the purpose of the interview, the top three insights or themes, and preview high-level recommendations. Use bullet points for clarity.
+
+---
+
+## Interview Details
+* **Date & Time:**
+* **Interviewer (Name & Role):**
+* **Participant (Name & Role):**
+
+---
+
+## Direct Customer Quotes (Verbatim)
+- List every direct quote from the customer that provides insight, feedback, or a rating. Use Markdown blockquotes (>) and attribute each quote to the speaker. Do not paraphrase or omit any quote that provides context, sentiment, or a specific request.
+
+---
+
+## Customer Ratings & Metrics (Verbatim)
+- Enumerate all customer-provided ratings, scores, or metrics. For each, specify the context (e.g., "Sales Engagement: 4/5").
+- If the customer compares Microsoft to other vendors, include the exact comparison and rating.
+- If the customer provides a breakdown (e.g., sales, post-sales, operational), list each separately.
+
+---
+
+## Interview Analysis by MCEM Stage
+### 1. Listen & Consult
+- Describe the customer’s initial challenges, strategic drivers, and objectives.
+- Include direct quotes and ratings relevant to this stage.
+- List any pain points or early opportunities.
+
+### 2. Inspire & Design
+- Summarize how solution ideas were received and refined.
+- Include customer reactions, enthusiasm, or hesitation (with quotes).
+- Note design considerations and integration challenges.
+
+### 3. Empower & Achieve
+- Detail PoC discussions, success criteria, and stakeholder buy-in.
+- Include quotes and highlight any roadblocks (budget, timeline, technical constraints).
+
+### 4. Realize Value
+- Describe deployment outcomes, adoption metrics, and customer feedback.
+- Include feedback on training, support, and change management.
+- Note any unexpected challenges.
+
+### 5. Manage & Optimize
+- Summarize long-term plans, governance, and optimization needs.
+- Include quotes about appetite for partnership, new capabilities, and requested playbooks.
+
+---
+
+## Analysis & Insights
+- Synthesize cross-stage themes, misalignments, and leverage points.
+- Explicitly call out any gaps between customer expectations and Microsoft’s delivery.
+- Highlight any regulatory, compliance, or competitive pressures mentioned by the customer.
+
+---
+
+## Recommendations
+- List 3–5 actionable recommendations, using bullet points.
+- For each, reference the specific customer quote, rating, or pain point that justifies the recommendation.
+- If the customer made explicit recommendations, include them verbatim and attribute them.
+
+---
+
+## Summary Table
+| Team Member Role                            | Key Customer Excerpts & Insights                                                                 | Proposed Actions                                                                                               |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Account Executive (AE)**                  |                                                                                                 |                                                                                                                |
+| **Customer Success Account Manager (CSAM)** |                                                                                                 |                                                                                                                |
+| **Solution Specialist (SS)**                |                                                                                                 |                                                                                                                |
+| **Customer Success Architect (CSA)**        |                                                                                                 |                                                                                                                |
+| **Partner / ISV Representative**            |                                                                                                 |                                                                                                                |
+| **Microsoft Executive Sponsor**             |                                                                                                 |                                                                                                                |
+| **Customer Account Sponsor**                |                                                                                                 |                                                                                                                |
+
+---
+
+## Additional Customer Feedback and Topics
+* **Sentiment & Mood:**
+  - Summarize the overall tone, including enthusiasm, frustration, trust, or concerns. Use direct quotes where possible.
+* **Other Topics:**
+  - List product-specific asks, feature requests, or organizational/process concerns.
+  - Include numeric ratings or benchmarks.
+* **Open Questions & Parking Lot Items:**
+  - List follow-up questions or deferred topics.
+  - Note any regulatory or compliance issues raised.
+
+---
+
+## Checklist for Report Completeness
+- [ ] All direct customer quotes included and attributed
+- [ ] All customer-provided ratings and metrics listed
+- [ ] All recommendations justified by transcript evidence
+- [ ] All explicit customer recommendations included verbatim
+- [ ] All MCEM stages addressed
+- [ ] All pain points and positive feedback captured
+- [ ] All summary tables and sections filled
+- [ ] All regulatory, compliance, and competitive pressures noted
+
+---
+
+> **Instructions for LLM:**
+> - Use only customer-facing sections in the output.
+> - Do not omit, paraphrase, or summarize any direct customer quote, rating, or recommendation—include them verbatim and attribute them.
+> - If a section cannot be filled, state "No data provided in transcript."
+> - Use clear Markdown formatting, bullet points, and tables for readability.
+> - Ensure every section and checklist item is addressed before completing the report.
+> - If the transcript contains regulatory, compliance, or competitive pressures, highlight them in the appropriate section.
