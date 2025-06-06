@@ -1,9 +1,55 @@
-.env
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE - VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Project specific
 # Keep reports/ and transcripts/ folders and their README.md, but ignore all other contents
 reports/*
 !reports/README.md
 transcripts/*
 !transcripts/README.md
-.vscode/
+
+# Logs and temporary files
+*.log
+.coverage
+htmlcov/
+.pytest_cache/
+*.swp
+*~
+.DS_Store
+Thumbs.db

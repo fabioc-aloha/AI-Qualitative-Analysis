@@ -1,14 +1,20 @@
 import os
 import logging
 from pathlib import Path
-from openai import AzureOpenAI
 from typing import Optional
+from openai import AzureOpenAI
 from utils.file_utils import count_tokens, get_client, load_analysis_template, ensure_reports_dir
 from utils.env_utils import setup_logging, check_env_vars, check_pandoc_installed
 
-def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI) -> Optional[str]:
+
+def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI, feedback_file_path: Path = None, prompts_dir: Path = None) -> Optional[str]:
     """
     Process a single transcript file and generate an analysis using Azure OpenAI.
+
+    This function loads a transcript, checks token limits, and generates a structured
+    analysis report using the provided template and Azure OpenAI client. It iteratively
+    validates the report for completeness and accuracy, revising as needed.
+
     Args:
         transcript_path (Path): Path to the transcript file.
         template (str): The analysis template content.
@@ -17,9 +23,30 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
         Optional[str]: The generated analysis text, or None if processing fails.
     """
     logging.info(f"Starting analysis for transcript: {transcript_path.name}")
-    with open(transcript_path, "r", encoding="utf-8") as f:
-        transcript = f.read()
+    try:
+        with open(transcript_path, "r", encoding="utf-8") as f:
+            transcript = f.read()
+    except FileNotFoundError:
+        logging.error(f"Transcript file not found: {transcript_path}")
+        return None
     logging.info("Transcript loaded from file.")
+    # Ensure prompts directory exists
+    # Always use root-level prompts/ directory
+    if prompts_dir is None:
+        root_dir = Path(__file__).resolve().parent.parent  # project root
+        prompts_dir = root_dir / 'prompts'
+    prompts_dir.mkdir(parents=True, exist_ok=True)
+    reports_dir = root_dir / 'reports'
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    with open(prompts_dir / 'initial_analysis.txt', 'r', encoding='utf-8') as f:
+        initial_prompt_template = f.read()
+    with open(prompts_dir / 'validation.txt', 'r', encoding='utf-8') as f:
+        validation_prompt_template = f.read()
+    with open(prompts_dir / 'revision.txt', 'r', encoding='utf-8') as f:
+        revision_prompt_template = f.read()
+    with open(prompts_dir / 'system.txt', 'r', encoding='utf-8') as f:
+        system_prompt_template = f.read()
+    transcript_stem = transcript_path.stem.replace(' ', '_')
     MAX_CONTEXT_TOKENS = 128000  # GPT-4o context window (adjust if needed)
     MAX_COMPLETION_TOKENS = 16000
     total_tokens = count_tokens(transcript + template)
@@ -30,46 +57,45 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
     logging.info("Preparing prompt for Azure OpenAI analysis.")
     try:
         logging.info("Sending prompt to Azure OpenAI for initial report generation.")
-        def generate_report(transcript, template, issues=None, prev_report=None):
-            if not issues:
-                prompt = (
-                    f"{template}\n\n"
-                    "TRANSCRIPT ANALYSIS INSTRUCTIONS (Enhanced Output Formatting):\n"
-                    "1. Start with a concise **Summary Section** at the top, using bullet points for key findings.\n"
-                    "2. Always include and fill out the **Summary Table** (see template) with relevant data for each role.\n"
-                    "3. If any metrics or ratings are mentioned, add a **Key Metrics Table** in Markdown format.\n"
-                    "4. Use clear section headings (##, ###) and bold for important points.\n"
-                    "5. Use bullet lists for recommendations and key insights.\n"
-                    "6. Format all direct quotes using Markdown blockquotes (>).\n"
-                    "7. Use tables, lists, and visual structure to improve readability.\n"
-                    "8. Follow the MCEM structure and ensure each stage is clearly separated.\n"
-                    "9. At the end, add a short **Summary of Insights** section that aggregates the most important findings.\n"
-                    "10. Ensure all sections in the template are present and well-formatted, even if some data is missing.\n"
-                    "\nTRANSCRIPT:\n"
-                    f"{transcript}"
-                )
+        def save_prompt(prompt_content, prompt_type, iteration=None):
+            """
+            Save a prompt to the prompts/ directory with a unique name.
+            """
+            if iteration is not None:
+                prompt_filename = f"{transcript_stem}_{prompt_type}_pass{iteration}.txt"
             else:
-                prompt = (
-                    f"{template}\n\n"
-                    "The previous report was incomplete or inaccurate. Please revise and improve the report to address ALL the listed issues below, ensuring every customer statement and key point is included and accurately represented. Use the same formatting and structure as before.\n\n"
-                    "TRANSCRIPT:\n" + transcript + "\n\nPREVIOUS REPORT:\n" + (prev_report or "") + "\n\nISSUES TO FIX:\n" + issues
-                )
+                prompt_filename = f"{transcript_stem}_{prompt_type}_prompt.txt"
+            prompt_path = prompts_dir / prompt_filename
+            with open(prompt_path, "w", encoding="utf-8") as pf:
+                pf.write(prompt_content)
+
+        def save_actual_prompt(prompt_content, prompt_type, iteration=None):
+            """
+            Save the actual prompt (with variables filled in) to the reports/ directory for troubleshooting.
+            """
+            if iteration is not None:
+                prompt_filename = f"{transcript_stem}_{prompt_type}_prompt_pass{iteration}.txt"
+            else:
+                prompt_filename = f"{transcript_stem}_{prompt_type}_prompt.txt"
+            prompt_path = reports_dir / prompt_filename
+            with open(prompt_path, "w", encoding="utf-8") as pf:
+                pf.write(prompt_content)
+
+        def generate_report(transcript, template, issues=None, prev_report=None, iteration=None):
+            """
+            Helper function to generate or revise a report using Azure OpenAI.
+            Loads prompt template from file, fills in variables, and saves the actual prompt used.
+            """
+            if not issues:
+                prompt = initial_prompt_template.format(transcript=transcript)
+                save_actual_prompt(prompt, "initial")
+            else:
+                prompt = revision_prompt_template.format(transcript=transcript, prev_report=prev_report or "", issues=issues)
+                save_actual_prompt(prompt, "revision", iteration)
             response = client.chat.completions.create(
                 model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
                 messages=[
-                    {"role": "system", "content": (
-                        "You are an expert business analyst creating detailed, evidence-based analyses. "
-                        "Begin by identifying all participants and their roles. "
-                        "Apply the Microsoft Customer Engagement Methodology (MCEM) framework to structure the analysis: "
-                        "1) Focus on customer industry context and desired outcomes, "
-                        "2) Identify cross-functional collaboration opportunities, "
-                        "3) Balance immediate needs with strategic goals, and "
-                        "4) Highlight Microsoft's unique value proposition. "
-                        "Support key findings with direct quotes and specific examples from "
-                        "the transcript. Pay special attention to ratings, metrics, and technical details. "
-                        "Enhance output formatting by using Markdown tables, bullet points, bold text, and clear section headings. "
-                        "Always include a summary section and summary table as described in the template. "
-                    )},
+                    {"role": "system", "content": system_prompt_template},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.3,
@@ -79,16 +105,16 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
 
         report = generate_report(transcript, template)
         logging.info("Initial report generated by Azure OpenAI.")
+        validation_feedback = []
+        feedback_md_header = f"# LLM Validation Feedback\n\n"
+        feedback_file = None
+        if feedback_file_path:
+            feedback_file = open(feedback_file_path, "w", encoding="utf-8")
+            feedback_file.write(feedback_md_header)
         for iteration in range(5):
             logging.info(f"Validation pass {iteration+1}: Checking report completeness against transcript.")
-            validation_prompt = (
-                "Compare the following transcript and the generated report. "
-                "Check that every statement, quote, and key point from the customer in the transcript is accurately captured in the report. "
-                "List any customer statements, quotes, or important points that are missing or misrepresented in the report. "
-                "If the report is missing anything, provide a list of omissions or inaccuracies and suggest corrections. "
-                "If the report is complete and accurate, reply with 'VALID'.\n\n"
-                "TRANSCRIPT:\n" + transcript + "\n\nREPORT:\n" + report
-            )
+            validation_prompt = validation_prompt_template.format(transcript=transcript, report=report)
+            save_actual_prompt(validation_prompt, "validation", iteration+1)
             validation_response = client.chat.completions.create(
                 model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
                 messages=[
@@ -99,22 +125,32 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
                 max_tokens=2000
             )
             validation_result = validation_response.choices[0].message.content.strip()
+            feedback_entry = f"### Validation Pass {iteration+1}\n{validation_result}\n"
+            validation_feedback.append(feedback_entry)
+            if feedback_file:
+                feedback_file.write(feedback_entry)
+                feedback_file.flush()
             if validation_result == "VALID":
                 logging.info(f"Report validation passed on iteration {iteration+1}: all customer statements are captured.")
                 break
             else:
                 logging.warning(f"Report validation found issues on iteration {iteration+1}:\n" + validation_result)
-                report = generate_report(transcript, template, issues=validation_result, prev_report=report)
+                report = generate_report(transcript, template, issues=validation_result, prev_report=report, iteration=iteration+1)
                 logging.info(f"Report revised on iteration {iteration+1}.")
+        if feedback_file:
+            feedback_file.close()
         logging.info(f"Analysis complete for transcript: {transcript_path.name}")
-        return report
+        feedback_md = feedback_md_header + "".join(validation_feedback)
+        return report, feedback_md
     except Exception as e:
         logging.error(f"Error processing transcript: {str(e)}")
         return None
 
+
 def process_large_transcript(transcript: str, template: str, client: AzureOpenAI) -> Optional[str]:
     """
     Handle large transcripts by breaking them into chunks for processing.
+
     Args:
         transcript (str): The full transcript text.
         template (str): The analysis template content.

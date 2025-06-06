@@ -1,7 +1,7 @@
-# Learnings: Iterative Refinement of the MCEM Interview Analysis Template
+# Learnings: Iterative Refinement of the Qualitative Interview Processor
 
 ## Context
-To improve the completeness and accuracy of automated MCEM interview transcript analyses, we iteratively enhanced the analysis template (`AnalysisTemplate-Improved.txt`) and the processing workflow. The primary goal was to reduce the number of LLM validation/revision iterations required for each transcript, especially for complex cases such as "rosebank" and "Tara Anglican School".
+To improve the completeness and accuracy of automated MCEM interview transcript analyses, we iteratively enhanced the analysis template (`AnalysisTemplate.txt`) and the processing workflow. The primary goal was to reduce the number of LLM validation/revision iterations required for each transcript, especially for complex cases such as "rosebank" and "Tara Anglican School".
 
 ## Key Refinement Steps
 
@@ -21,7 +21,7 @@ To improve the completeness and accuracy of automated MCEM interview transcript 
    - These changes address concerns about template complexity and LLM/human usability, aiming for a balance between completeness and clarity.
 
 3. **Workflow Improvements**
-   - The script (`process_transcripts.py`) was refactored to use the improved template and configuration.
+   - The script (`main.py`) was refactored to use the improved template and configuration.
    - The workflow now enforces completion of all checklists and self-checks before a report is considered complete.
 
 4. **Validation and Iteration**
@@ -43,4 +43,28 @@ To improve the completeness and accuracy of automated MCEM interview transcript 
 
 ---
 
-*This document summarizes the learnings and rationale behind the iterative refinement of the MCEM interview analysis template and workflow.*
+# Key Learnings from Refactor (May 2024)
+
+## Process Flow & Logging
+- Sectioned, stepwise logging for each transcript greatly improves transparency and user trust.
+- Announcing each process step (collection, LLM analysis, self-check, human review, finalization) in logs helps users understand and audit the workflow.
+- Summarizing human review and finalization at the end of batch processing reinforces the importance of human-in-the-loop validation.
+
+## CLI & User Experience
+- Adding CLI options for input/output/template increases flexibility and usability for diverse research workflows.
+- Clear CLI help and documentation reduce onboarding friction for new users.
+
+## Hallucination Mitigation
+- Explicitly documenting and logging the LLM self-check step, followed by mandatory human review, is essential for mitigating hallucinations and ensuring trustworthy outputs.
+- Aligning code, logs, and documentation around this process makes the tool more robust and defensible in research settings.
+
+## Documentation
+- Placing the process flow and validation steps at the top of the README helps set user expectations and supports best practices.
+- Keeping README, code, and logs in sync prevents confusion and supports reproducibility.
+
+## Dependency & Error Handling
+- Ensuring all dependencies are listed in requirements.txt and fixing import/syntax errors in tests improves reliability and maintainability.
+
+---
+
+*This document summarizes the learnings and rationale behind the iterative refinement of the Qualitative Interview Processor analysis template and workflow.*

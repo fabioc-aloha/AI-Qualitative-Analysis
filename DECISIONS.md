@@ -3,7 +3,7 @@
 ## Architecture Overview
 
 ### High-Level Design
-- The solution is a Python script (`process_transcripts.py`) that automates the analysis of customer interview transcripts using Azure OpenAI GPT-4.
+- The solution is a Python script (`main.py`) that automates the analysis of customer interview transcripts using Azure OpenAI GPT-4.
 - The script is designed for batch processing: it reads all `.txt` files from a `transcripts/` directory and outputs structured analysis reports to a `reports/` directory.
 - Analyses are generated in Markdown format and then converted to Word (`.docx`) format using Pandoc for business-friendly consumption.
 - The analysis is guided by a reusable template (`AnalysisTemplate.txt`) that enforces the MCEM (Microsoft Customer Engagement Model) structure.
@@ -11,7 +11,7 @@
 - Environment variables (API keys, endpoints, deployment names) are loaded from a `.env` file for security and flexibility.
 
 ### Key Components
-- **process_transcripts.py**: Main script orchestrating the workflow (loading environment, processing files, calling Azure OpenAI, handling output).
+- **main.py**: Main script orchestrating the workflow (loading environment, processing files, calling Azure OpenAI, handling output).
 - **AnalysisTemplate.txt**: Template file that defines the structure and requirements for the analysis output.
 - **transcripts/**: Directory containing input transcript files.
 - **reports/**: Directory for output reports (Markdown and Word formats).
@@ -26,9 +26,9 @@
 
 ---
 
-## Project Structure (as of 2025-05-11)
+## Project Structure (as of 2025-06-06)
 
-- `process_transcripts.py`: Main entry point for the application.
+- `main.py`: Main entry point for the application.
 - `utils/`
   - `env_utils.py`: Logging setup, environment variable and Pandoc checks.
   - `file_utils.py`: Token counting, OpenAI client creation, template loading, and reports directory management.

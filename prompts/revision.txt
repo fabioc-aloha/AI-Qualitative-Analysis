@@ -1,0 +1,10 @@
+The previous report was incomplete or inaccurate. Please revise and improve the report to address ALL the listed issues below, ensuring every customer statement and key point is included and accurately represented. Use the same formatting and structure as before.
+
+TRANSCRIPT:
+{transcript}
+
+PREVIOUS REPORT:
+{prev_report}
+
+ISSUES TO FIX:
+{issues}

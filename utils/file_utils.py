@@ -1,12 +1,15 @@
-from openai import AzureOpenAI
 import os
-from pathlib import Path
-import tiktoken
-import logging
 import sys
+import logging
+from pathlib import Path
+from openai import AzureOpenAI
+import tiktoken
+
 
 def count_tokens(text: str) -> int:
-    """Count tokens using tiktoken for GPT-4.
+    """
+    Count tokens using tiktoken for GPT-4 models.
+
     Args:
         text (str): The text to count tokens for.
     Returns:
@@ -15,8 +18,11 @@ def count_tokens(text: str) -> int:
     encoding = tiktoken.get_encoding("cl100k_base")
     return len(encoding.encode(text))
 
+
 def get_client() -> AzureOpenAI:
-    """Create and return an Azure OpenAI client using environment variables.
+    """
+    Create and return an Azure OpenAI client using environment variables.
+
     Returns:
         AzureOpenAI: The initialized Azure OpenAI client.
     """
@@ -26,8 +32,11 @@ def get_client() -> AzureOpenAI:
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
     )
 
+
 def load_analysis_template(template_path: str = "AnalysisTemplate.txt") -> str:
-    """Load the analysis template from file.
+    """
+    Load the analysis template from file.
+
     Args:
         template_path (str): Path to the template file.
     Returns:
@@ -41,8 +50,11 @@ def load_analysis_template(template_path: str = "AnalysisTemplate.txt") -> str:
         logging.error(f"{template_path} not found.")
         sys.exit(1)
 
+
 def ensure_reports_dir(reports_dir: Path = Path("./reports")) -> Path:
-    """Ensure the reports directory exists and return its Path.
+    """
+    Ensure the reports directory exists and return its Path.
+
     Args:
         reports_dir (Path): The directory to ensure exists.
     Returns:

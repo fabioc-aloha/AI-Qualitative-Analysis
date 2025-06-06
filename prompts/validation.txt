@@ -1,0 +1,7 @@
+Compare the following transcript and the generated report. Check that every statement, quote, and key point from the customer in the transcript is accurately captured in the report. List any customer statements, quotes, or important points that are missing or misrepresented in the report. If the report is missing anything, provide a list of omissions or inaccuracies and suggest corrections. If the report is complete and accurate, reply with 'VALID'.
+
+TRANSCRIPT:
+{transcript}
+
+REPORT:
+{report}

@@ -12,13 +12,8 @@ processing:
   max_completion_tokens: 16000
   language_detection: false
   output_format: ["md", "docx"]
-  template_path: "AnalysisTemplate-Improved.txt"
+  template_path: "AnalysisTemplate.txt"
   summary_report: true
   dry_run: false
   log_to_file: false
   log_file_path: "logs/processing.log"
-  analysis_template: "improved"
-  available_templates:
-    improved: "AnalysisTemplate-Improved.txt"
-    default: "AnalysisTemplate.txt"
-    # Add more templates here
