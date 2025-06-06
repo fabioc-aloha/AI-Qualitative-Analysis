@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional
 from openai import AzureOpenAI
 from utils.file_utils import count_tokens, get_client, load_analysis_template, ensure_reports_dir
-from utils.env_utils import setup_logging, check_env_vars, check_pandoc_installed
+from utils.env_utils import setup_logging, check_env_vars, check_pandoc_installed, STANDARD_LEVEL
 
 
 def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI, feedback_file_path: Path = None, prompts_dir: Path = None) -> Optional[str]:
@@ -111,9 +111,11 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
         if feedback_file_path:
             feedback_file = open(feedback_file_path, "w", encoding="utf-8")
             feedback_file.write(feedback_md_header)
+        from utils.env_utils import show_progress_bar
+        show_progress_bar(3, transcript_name=transcript_path.name)
+        success = False
         for iteration in range(5):
-            from utils.env_utils import show_progress_bar
-            show_progress_bar(2, transcript_name=transcript_path.name, extra=f"LLM Validation/Revision Pass {iteration+1}")
+            show_progress_bar(3, transcript_name=transcript_path.name, extra=f"LLM Validation/Revision Pass {iteration+1}")
             logging.info(f"Validation pass {iteration+1}: Checking report completeness against transcript.")
             validation_prompt = validation_prompt_template.format(transcript=transcript, report=report)
             save_actual_prompt(validation_prompt, "validation", iteration+1)
@@ -127,18 +129,36 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
                 max_tokens=2000
             )
             validation_result = validation_response.choices[0].message.content.strip()
+            is_final = validation_result.strip().upper() in ["VALID", "VALID (A)", "VALID (B)"]
             feedback_entry = f"### Validation Pass {iteration+1}\n{validation_result}\n"
             validation_feedback.append(feedback_entry)
             if feedback_file:
                 feedback_file.write(feedback_entry)
                 feedback_file.flush()
-            if validation_result == "VALID":
-                logging.info(f"Report validation passed on iteration {iteration+1}: all customer statements are captured.")
+            if is_final:
+                logging.info(f"Report validation passed on iteration {iteration+1}: {validation_result}")
+                # Add an extra blank line after the last (successful) pass
+                if feedback_file:
+                    feedback_file.write("\n")
+                    feedback_file.flush()
+                success = True
                 break
             else:
                 logging.info(f"Report validation found issues on iteration {iteration+1}:\n" + validation_result)
                 report = generate_report(transcript, template, issues=validation_result, prev_report=report, iteration=iteration+1)
                 logging.info(f"Report revised on iteration {iteration+1}.")
+        # Final outcome log
+        logger = logging.getLogger()
+        if logger.getEffectiveLevel() == STANDARD_LEVEL:
+            if success:
+                logger.log(STANDARD_LEVEL, f"SUCCESS: Analysis for '{transcript_path.name}' passed validation.")
+            else:
+                logger.log(STANDARD_LEVEL, f"FAILURE: Analysis for '{transcript_path.name}' did NOT pass validation after 5 attempts.")
+        else:
+            if success:
+                logging.info(f"SUCCESS: Analysis for '{transcript_path.name}' passed validation.")
+            else:
+                logging.error(f"FAILURE: Analysis for '{transcript_path.name}' did NOT pass validation after 5 attempts.")
         if feedback_file:
             feedback_file.close()
         logging.info(f"Analysis complete for transcript: {transcript_path.name}")

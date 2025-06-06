@@ -78,6 +78,11 @@ To improve the completeness and accuracy of automated MCEM interview transcript 
 - Progress bar and per-file logging improved for transparency.
 - Documentation and process flow updated to reflect the new approach.
 
+## Release 1.1.1 (June 2025): Output Hygiene & Outcome Logging
+- Old report files for each transcript are now deleted before processing to prevent confusion.
+- Final log message after validation now clearly indicates SUCCESS or FAILURE.
+- Minor improvements to log clarity and output separation.
+
 ---
 
 *This document summarizes the learnings and rationale behind the iterative refinement of the Qualitative Interview Processor analysis template and workflow.*

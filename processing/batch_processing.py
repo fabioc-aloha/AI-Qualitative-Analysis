@@ -40,10 +40,17 @@ def process_all_transcripts(client, template: str, reports_dir: Path, input_dir:
         template_display = template_path if template_path else (template[:40] + '...')
         if is_standard:
             show_progress_bar(0, transcript_name=transcript_file.name, extra=f"Template: {template_display}")
+            show_progress_bar(1, transcript_name=transcript_file.name)
         else:
             logger.standard("==============================")
             logger.standard("Processing transcript: %s", transcript_file.name)
             logger.standard("Step 0: Preparing Analysis - File: '%s', Template: '%s'", transcript_file.name, template_display)
+            logger.standard("Step 1: Transcript Collection - Loaded '%s'", transcript_file.name)
+        # Delete old report files for this transcript
+        for ext in ["_analysis.md", "_analysis.docx", "_llm_validation.md"]:
+            old_report = reports_dir / f"{transcript_file.stem}{ext}"
+            if old_report.exists():
+                old_report.unlink()
         # Step 1: Transcript Collection
         md_output_file = reports_dir / f"{transcript_file.stem}_analysis.md"
         docx_output_file = reports_dir / f"{transcript_file.stem}_analysis.docx"
@@ -65,7 +72,7 @@ def process_all_transcripts(client, template: str, reports_dir: Path, input_dir:
                 logger.standard("Step 4: Human Review & Approval - Please review the generated reports in '%s' for accuracy, context, and completeness before sharing.", reports_dir)
             # Step 5: Finalized, Shareable Report - Exporting to Word format...
             if is_standard:
-                show_progress_bar(5, transcript_name=transcript_file.name)
+                show_progress_bar(5, transcript_name=transcript_file.name + "\n")
             else:
                 logger.standard("Step 5: Finalized, Shareable Report - Exporting to Word format...")
             convert_markdown_to_docx(md_output_file, docx_output_file)
@@ -73,8 +80,8 @@ def process_all_transcripts(client, template: str, reports_dir: Path, input_dir:
         else:
             logging.error("Failed to generate report for '%s'.", transcript_file.name)
     if is_standard:
-        show_progress_bar(5, extra="All transcripts processed. Review reports for human approval and sharing.")
-        logging.info("All transcripts processed. Review reports for human approval and sharing.")
+        show_progress_bar(5, extra="All transcripts processed. Review reports for human approval and sharing.\n")
+        logging.info("All transcripts processed. Review reports for human approval and sharing.\n")
     else:
         logger.standard("==============================")
         logger.standard("\nStep 4: Human Review & Approval - Please review the generated reports in '%s' for accuracy, context, and completeness before sharing.", reports_dir)

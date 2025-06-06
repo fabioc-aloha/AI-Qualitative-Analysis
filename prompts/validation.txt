@@ -23,3 +23,12 @@ TRANSCRIPT:
 
 REPORT:
 {report}
+
+# INSTRUCTIONS TO THE LLM (appended to the validation prompt):
+# If the report is complete and accurate for business use, reply with ONLY 'VALID (A)', 'VALID (B)', etc., where the grade reflects how close to perfect the report is:
+# - A: Perfect or nearly perfect (no substantive issues)
+# - B: Very minor issues, but fully usable
+# - C: Some issues, but still covers all major points
+# - D: Significant issues, but not unusable
+# - F: Major omissions or errors, not usable
+# If the report is not VALID, list the issues and suggest corrections as before.

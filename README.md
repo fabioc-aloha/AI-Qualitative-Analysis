@@ -2,13 +2,12 @@
 
 # AI Qualitative Analysis
 
-**Version: 1.1.0**
+**Version: 1.1.1**
 
-> **Changelog (v1.1.0, June 2025):**
-> - Introduced 'practical, not perfect' validation: LLM validation now requires reports to be very accurate and complete for business use, not flawless.
-> - Most transcripts now pass in 1–2 turns, making the workflow efficient and realistic.
-> - Progress bar and logs improved for transparency and per-file clarity.
-> - Documentation updated to reflect the new validation approach.
+> **Changelog (v1.1.1, June 2025):**
+> - Automatically deletes old report files for each transcript before processing to avoid confusion with previous runs.
+> - Final log message now indicates SUCCESS or FAILURE after validation attempts.
+> - Minor log and output improvements for clarity.
 
 Easily turn your qualitative customer interviews and survey transcripts into actionable, structured reports—powered by Azure OpenAI's large language models (LLMs) and the Microsoft Customer Engagement Model (MCEM).
 
@@ -276,6 +275,10 @@ A: You can:
 - See `LEARNINGS.md` for implementation insights and lessons
 
 ---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a full version history and feature list.
 
 **Privacy Note:**
 - The `transcripts/` and `reports/` folders are included in `.gitignore` by default to prevent accidental publishing of PII or sensitive data. Always verify your `.gitignore` settings before sharing or publishing this repository.
