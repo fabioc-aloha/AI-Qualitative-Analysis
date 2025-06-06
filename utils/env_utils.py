@@ -15,6 +15,7 @@ if not hasattr(logging, 'STANDARD'):
 
 # TQL-style progress bar for pipeline steps
 PIPELINE_STEPS = [
+    "Preparing Analysis",  # Step 0
     "Transcript Collection",
     "Automated LLM Analysis",
     "LLM Self-Check & Validation",
@@ -22,10 +23,17 @@ PIPELINE_STEPS = [
     "Finalized, Shareable Report"
 ]
 
-def show_progress_bar(current_step_idx: int, total_steps: int = 5):
+def show_progress_bar(current_step_idx: int, total_steps: int = 6, transcript_name: str = None, extra: str = None):
     bar = "[" + "=" * (current_step_idx + 1) + ">" + "." * (total_steps - current_step_idx - 1) + "]"
     step_name = PIPELINE_STEPS[current_step_idx]
-    print(f"{bar} {current_step_idx+1}/{total_steps} {step_name}", flush=True)
+    msg = f"{bar} {current_step_idx+1}/{total_steps} {step_name}"
+    if transcript_name:
+        msg += f" | Transcript: {transcript_name}"
+    if extra:
+        msg += f" | {extra}"
+    logger = logging.getLogger()
+    if logger.getEffectiveLevel() == STANDARD_LEVEL:
+        logger.log(STANDARD_LEVEL, msg)
 
 
 def setup_logging(level="STANDARD") -> None:
@@ -73,3 +81,4 @@ def check_pandoc_installed() -> None:
     if which("pandoc") is None:
         logging.error("Pandoc is not installed or not in PATH. Please install Pandoc to enable Word conversion.")
         sys.exit(1)
+

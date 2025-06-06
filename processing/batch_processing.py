@@ -37,20 +37,19 @@ def process_all_transcripts(client, template: str, reports_dir: Path, input_dir:
     for transcript_file in transcript_files:
         logger = logging.getLogger()
         is_standard = logger.getEffectiveLevel() == STANDARD_LEVEL
+        template_display = template_path if template_path else (template[:40] + '...')
         if is_standard:
-            print(f"\nProcessing transcript: {transcript_file.name}")
-            show_progress_bar(0)
+            show_progress_bar(0, transcript_name=transcript_file.name, extra=f"Template: {template_display}")
         else:
             logger.standard("==============================")
             logger.standard("Processing transcript: %s", transcript_file.name)
-            logger.standard("Step 1: Transcript Collection - Loaded '%s'", transcript_file.name)
+            logger.standard("Step 0: Preparing Analysis - File: '%s', Template: '%s'", transcript_file.name, template_display)
         # Step 1: Transcript Collection
         md_output_file = reports_dir / f"{transcript_file.stem}_analysis.md"
         docx_output_file = reports_dir / f"{transcript_file.stem}_analysis.docx"
         # Step 2: Automated LLM Analysis
         if is_standard:
-            show_progress_bar(1)
-            print(f"  Using template: {template_path or 'AnalysisTemplate.txt'}")
+            show_progress_bar(2, transcript_name=transcript_file.name)
         else:
             logger.standard("Step 2: Automated LLM Analysis - Generating draft report...")
         # Save LLM validation/feedback if available
@@ -61,12 +60,12 @@ def process_all_transcripts(client, template: str, reports_dir: Path, input_dir:
             logging.info("Draft report saved: %s", md_output_file)
             # Step 4: Human Review & Approval
             if is_standard:
-                show_progress_bar(3)
+                show_progress_bar(4, transcript_name=transcript_file.name)
             else:
                 logger.standard("Step 4: Human Review & Approval - Please review the generated reports in '%s' for accuracy, context, and completeness before sharing.", reports_dir)
             # Step 5: Finalized, Shareable Report - Exporting to Word format...
             if is_standard:
-                show_progress_bar(4)
+                show_progress_bar(5, transcript_name=transcript_file.name)
             else:
                 logger.standard("Step 5: Finalized, Shareable Report - Exporting to Word format...")
             convert_markdown_to_docx(md_output_file, docx_output_file)
@@ -74,7 +73,8 @@ def process_all_transcripts(client, template: str, reports_dir: Path, input_dir:
         else:
             logging.error("Failed to generate report for '%s'.", transcript_file.name)
     if is_standard:
-        print("\nAll transcripts processed. Review reports for human approval and sharing.")
+        show_progress_bar(5, extra="All transcripts processed. Review reports for human approval and sharing.")
+        logging.info("All transcripts processed. Review reports for human approval and sharing.")
     else:
         logger.standard("==============================")
         logger.standard("\nStep 4: Human Review & Approval - Please review the generated reports in '%s' for accuracy, context, and completeness before sharing.", reports_dir)

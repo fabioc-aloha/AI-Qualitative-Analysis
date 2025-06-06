@@ -65,6 +65,19 @@ To improve the completeness and accuracy of automated MCEM interview transcript 
 ## Dependency & Error Handling
 - Ensuring all dependencies are listed in requirements.txt and fixing import/syntax errors in tests improves reliability and maintainability.
 
+## May 2024: Progress Bar & Logging Enhancement
+- Added an explicit initial step (0/5) to the progress bar for each transcript file, displaying the file name and the analysis template being used.
+- This change clarifies per-file processing in logs and progress output, improving transparency and user guidance.
+- All subsequent pipeline steps were shifted to accommodate the new step 0, ensuring accurate and granular progress tracking throughout the analysis workflow.
+
+---
+
+## Release 1.1.0 (June 2025): Practical, Not Perfect Validation
+- LLM validation now requires reports to be very accurate and complete for business use, not flawless.
+- Most transcripts pass validation in 1–2 turns, making the workflow efficient and realistic.
+- Progress bar and per-file logging improved for transparency.
+- Documentation and process flow updated to reflect the new approach.
+
 ---
 
 *This document summarizes the learnings and rationale behind the iterative refinement of the Qualitative Interview Processor analysis template and workflow.*

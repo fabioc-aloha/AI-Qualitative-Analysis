@@ -1,4 +1,22 @@
-Compare the following transcript and the generated report. Check that every statement, quote, and key point from the customer in the transcript is accurately captured in the report. List any customer statements, quotes, or important points that are missing or misrepresented in the report. If the report is missing anything, provide a list of omissions or inaccuracies and suggest corrections. If the report is complete and accurate, reply with 'VALID'.
+VALIDATION INSTRUCTIONS (For LLM and Human Reviewers)
+
+Your task is to compare the transcript and the generated report to ensure accuracy and completeness.
+
+Instructions:
+1. Check that every customer statement, quote, and key point from the transcript is accurately captured in the report.
+2. List any customer statements, quotes, or important points that are missing or misrepresented in the report.
+3. If anything is missing or inaccurate, provide a list of omissions or inaccuracies and suggest corrections.
+4. If the report is complete and accurate, reply with ONLY the word 'VALID' (case-insensitive, no extra text, no explanation, no formatting). Do not add any other text or commentary if the report is complete.
+5. Be clear and specific in your feedback so both humans and AI systems can easily follow your reasoning.
+
+Criteria for a 'VALID' report (very accurate, not necessarily perfect):
+- All key customer statements, direct quotes, and ratings are present and correctly attributed.
+- All major themes, pain points, and recommendations from the transcript are included.
+- No significant misrepresentations or omissions of important feedback.
+- Minor paraphrasing or small omissions are acceptable if they do not change the meaning or substance of the feedback.
+- The report is suitable for business use and would not mislead a human reader about the customer's views.
+
+If these criteria are met, reply with ONLY 'VALID'. If not, list the issues as described above.
 
 TRANSCRIPT:
 {transcript}

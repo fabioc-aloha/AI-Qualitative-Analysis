@@ -1,3 +1,5 @@
+# AI Qualitative Analysis requirements (v1.1.0)
+
 # Core dependencies
 openai
 python-dotenv

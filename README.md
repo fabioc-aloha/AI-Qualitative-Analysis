@@ -1,16 +1,22 @@
-![Qualitative Interview Processor Banner](banner.png)
+![AI Qualitative Analysis Banner](banner.png)
 
-# Qualitative Interview Processor
+# AI Qualitative Analysis
 
-**Version: 1.0.0**
+**Version: 1.1.0**
+
+> **Changelog (v1.1.0, June 2025):**
+> - Introduced 'practical, not perfect' validation: LLM validation now requires reports to be very accurate and complete for business use, not flawless.
+> - Most transcripts now pass in 1–2 turns, making the workflow efficient and realistic.
+> - Progress bar and logs improved for transparency and per-file clarity.
+> - Documentation updated to reflect the new validation approach.
 
 Easily turn your qualitative customer interviews and survey transcripts into actionable, structured reports—powered by Azure OpenAI's large language models (LLMs) and the Microsoft Customer Engagement Model (MCEM).
 
 **Includes a human-in-the-loop validation step to mitigate LLM hallucinations and ensure all insights are grounded in the original transcript.**
 
-## Process Flow: Reliable, Actionable Analysis
+## Process Flow: Reliable, Actionable Analysis (Practical, Not Perfect)
 
-To ensure every report is accurate, trustworthy, and ready for business use, this tool combines advanced AI with both automated and human validation steps:
+To ensure every report is accurate, trustworthy, and ready for business use, this tool combines advanced AI with both automated and human validation steps. **The validation process is designed to be practical, not perfect:** the LLM is instructed to pass reports that are "very accurate" and complete for business use, not flawless. Most transcripts pass in 1-2 turns, making the workflow efficient and realistic for real-world use.
 
 **Process Flow:**
 
@@ -20,8 +26,10 @@ To ensure every report is accurate, trustworthy, and ready for business use, thi
 2. **Automated LLM Analysis**
    - The script uses Azure OpenAI (GPT-4) to generate a structured draft report based on your chosen template.
 
-3. **LLM Self-Check & Validation**
+3. **LLM Self-Check & Validation (Practical, Not Perfect)**
    - The AI reviews its own output, checking for completeness, missing quotes, and alignment with the transcript (using built-in prompt-based validation).
+   - The LLM is explicitly instructed to reply with ONLY 'VALID' if the report is complete and accurate for business use, even if not perfect. This ensures the validation loop is practical and does not require endless revisions for minor or subjective issues.
+   - Most transcripts pass validation in 1-2 turns; only rare cases require a second revision.
 
 4. **Human Review & Approval**
    - You review the draft report, ensuring:
@@ -37,6 +45,7 @@ To ensure every report is accurate, trustworthy, and ready for business use, thi
 **Why this matters:**
 - LLMs can sometimes generate plausible-sounding but unsupported content (hallucinations).
 - Automated and human validation together ensure all findings are evidence-based and actionable, maintaining trust and business value.
+- The practical validation approach ensures the workflow is efficient and avoids unnecessary iterations.
 
 > **Best Practice:** Always review and verify LLM-generated reports before sharing or acting on the insights.
 
@@ -152,11 +161,11 @@ For more details, see the [Azure OpenAI documentation](https://learn.microsoft.c
 
 ## Process Flow & Validation (LLM + Human-in-the-Loop)
 
-This tool is designed to mitigate LLM hallucinations and ensure high-quality qualitative analysis through a clear, multi-step process:
+This tool is designed to mitigate LLM hallucinations and ensure high-quality qualitative analysis through a clear, multi-step process. **The validation loop is practical, not perfect: the LLM is instructed to pass reports that are very accurate and complete for business use, not flawless.**
 
 1. **Transcript Collection**: Load each transcript from the specified input folder.
 2. **Automated LLM Analysis**: Use Azure OpenAI (GPT-4) to generate a draft report for each transcript, following a customizable template (default: MCEM framework).
-3. **LLM Self-Check & Validation**: The LLM performs a self-validation step to check for consistency and completeness.
+3. **LLM Self-Check & Validation (Practical, Not Perfect)**: The LLM performs a self-validation step to check for consistency and completeness. It is instructed to reply 'VALID' if the report is complete and accurate for business use, even if not perfect.
 4. **Human Review & Approval**: Users are prompted to review each generated report for accuracy, context, and completeness. This step is essential to mitigate hallucinations and ensure the final output is trustworthy.
 5. **Finalized, Shareable Report**: Approved reports are saved in Markdown and Word formats, ready for sharing.
 
@@ -164,7 +173,7 @@ This tool is designed to mitigate LLM hallucinations and ensure high-quality qua
 
 ## Hallucination Mitigation & Human Validation
 
-- **LLM Self-Check**: After initial analysis, the LLM performs a self-validation step to catch inconsistencies or missing information.
+- **LLM Self-Check**: After initial analysis, the LLM performs a self-validation step to catch inconsistencies or missing information. The validation prompt is designed to be practical, not require perfection, and most transcripts pass in 1-2 turns.
 - **Human-in-the-Loop**: Every report requires human review and approval before being finalized. This is clearly announced in the logs and documentation.
 - **Process Transparency**: Logs and output files are organized to make each step and its outcome clear, supporting traceability and auditability.
 

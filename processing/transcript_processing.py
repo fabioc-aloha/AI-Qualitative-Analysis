@@ -112,6 +112,8 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
             feedback_file = open(feedback_file_path, "w", encoding="utf-8")
             feedback_file.write(feedback_md_header)
         for iteration in range(5):
+            from utils.env_utils import show_progress_bar
+            show_progress_bar(2, transcript_name=transcript_path.name, extra=f"LLM Validation/Revision Pass {iteration+1}")
             logging.info(f"Validation pass {iteration+1}: Checking report completeness against transcript.")
             validation_prompt = validation_prompt_template.format(transcript=transcript, report=report)
             save_actual_prompt(validation_prompt, "validation", iteration+1)
@@ -134,7 +136,7 @@ def process_transcript(transcript_path: Path, template: str, client: AzureOpenAI
                 logging.info(f"Report validation passed on iteration {iteration+1}: all customer statements are captured.")
                 break
             else:
-                logging.warning(f"Report validation found issues on iteration {iteration+1}:\n" + validation_result)
+                logging.info(f"Report validation found issues on iteration {iteration+1}:\n" + validation_result)
                 report = generate_report(transcript, template, issues=validation_result, prev_report=report, iteration=iteration+1)
                 logging.info(f"Report revised on iteration {iteration+1}.")
         if feedback_file:

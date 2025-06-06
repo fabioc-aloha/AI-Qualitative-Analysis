@@ -1,14 +1,15 @@
-TRANSCRIPT ANALYSIS INSTRUCTIONS (Enhanced Output Formatting):
-1. Start with a concise **Summary Section** at the top, using bullet points for key findings.
-2. Always include and fill out the **Summary Table** (see template) with relevant data for each role.
-3. If any metrics or ratings are mentioned, add a **Key Metrics Table** in Markdown format.
+INITIAL ANALYSIS INSTRUCTIONS (For LLM and Human Reviewers)
+
+1. Begin with a concise **Summary Section** at the top, using bullet points for the main findings.
+2. Always include a **Summary Table** (see template) with relevant data for each participant or role.
+3. If metrics or ratings are mentioned, add a **Key Metrics Table** in Markdown format.
 4. Use clear section headings (##, ###) and bold for important points.
 5. Use bullet lists for recommendations and key insights.
 6. Format all direct quotes using Markdown blockquotes (>).
-7. Use tables, lists, and visual structure to improve readability.
-8. Follow the MCEM structure and ensure each stage is clearly separated.
-9. At the end, add a short **Summary of Insights** section that aggregates the most important findings.
-10. Ensure all sections in the template are present and well-formatted, even if some data is missing.
+7. Use tables, lists, and visual structure to make the report easy to read.
+8. Organize the analysis using the MCEM framework, with each stage clearly separated.
+9. At the end, add a short **Summary of Insights** section that brings together the most important findings.
+10. Make sure all sections in the template are present and well-formatted, even if some data is missing.
 
 TRANSCRIPT:
 {transcript}

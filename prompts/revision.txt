@@ -1,5 +1,16 @@
 The previous report was incomplete or inaccurate. Please revise and improve the report to address ALL the listed issues below, ensuring every customer statement and key point is included and accurately represented. Use the same formatting and structure as before.
 
+REVISION INSTRUCTIONS (For LLM and Human Reviewers)
+
+Your task is to revise and improve the previous report so that it fully addresses all listed issues. Make sure every customer statement and key point is included and accurately represented.
+
+Instructions:
+1. Carefully review the issues listed below and ensure each one is addressed in your revision.
+2. Include all relevant customer statements and key points from the transcript.
+3. Use the same formatting and structure as the original report (Markdown headings, tables, bullet points, blockquotes, etc.).
+4. Be clear, thorough, and transparent in your reasoning.
+5. Make the revised report easy to follow for both humans and AI systems.
+
 TRANSCRIPT:
 {transcript}
 
