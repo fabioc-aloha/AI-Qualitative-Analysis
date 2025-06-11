@@ -38,7 +38,7 @@ from utils.env_utils import check_env_vars, check_pandoc_installed, setup_loggin
 from utils.file_utils import ensure_reports_dir, get_client, load_analysis_template
 
 
-__version__ = "1.1.1"  # Version string for the application
+__version__ = "1.1.3"  # Version string for the application
 
 
 # --- Main Entry Point ---

@@ -77,6 +77,7 @@
 
 # Detailed Implementation Flow
 
+```
 main.py
   ↓
 Parse CLI args, set up logging, check environment (env_utils.py)
@@ -124,6 +125,7 @@ For each transcript in transcripts/:
             * Convert *_analysis.md to *_analysis.docx using Pandoc
         - Log step and progress bar
         - Save final outputs to reports/
+```
 
 ## Large Transcript Processing
 When a transcript exceeds the token limit (128,000 tokens for GPT-4), the system automatically handles it using transcript_chunking.py:

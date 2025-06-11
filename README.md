@@ -2,7 +2,7 @@
 
 # AI Qualitative Analysis
 
-**Version: 1.1.1**
+**Version: 1.1.3**
 
 > **Changelog (v1.1.1, June 2025):**
 > - Automatically deletes old report files for each transcript before processing to avoid confusion with previous runs.
@@ -284,3 +284,13 @@ See [CHANGELOG.md](CHANGELOG.md) for a full version history and feature list.
 - The `transcripts/` and `reports/` folders are included in `.gitignore` by default to prevent accidental publishing of PII or sensitive data. Always verify your `.gitignore` settings before sharing or publishing this repository.
 
 *Turn your qualitative data into business value—fast, accurate, and repeatable.*
+
+## Codebase Flow & Diagrams
+
+For a detailed, step-by-step breakdown of the processing pipeline—including high-level diagrams, validation/revision loop, and large transcript handling—see [flow.md](flow.md).
+
+This document provides:
+- Visual diagrams of the main pipeline and validation loop
+- A detailed, code-accurate description of each processing step
+- Explanation of large transcript chunking and consolidation
+- Output file structure and auditability notes
