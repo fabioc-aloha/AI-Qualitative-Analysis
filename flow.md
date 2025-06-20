@@ -66,112 +66,159 @@
          ↓
 ┌────────┴────────┐     ┌─────────────┐
 │  Validation     │ ──→ │   Valid?    │
+│  (Azure OpenAI) │     │ Grade Check │
 └────────┬────────┘     └──────┬──────┘
          │                     │
          │                Yes  │  No
+         │        (A/B/VALID)  │  (INVALID)
          │                     ↓
-         │              ┌──────┴──────┐
-         └───────────── │   Revise    │
-                        └─────────────┘
+         │              ┌──────┴─────────┐
+         │              │   Revise       │
+         │              │ (Azure OpenAI) │
+         │              └──────┬─────────┘
+         │                     │
+         └─────────────────────┘
+                               │
+                        Max 5 iterations
 ```
+
+**Validation Configuration:**
+- Configurable allowed grades in `config.yaml`
+- Default: `["VALID", "VALID (A)", "VALID (B)"]`
+- Each validation pass logged with grade and feedback
+- Success/failure outcome logged for transparency
 
 # Detailed Implementation Flow
 
 ```
 main.py
   ↓
-Parse CLI args, set up logging, check environment (env_utils.py)
+1. Parse CLI args (--input, --output, --template, --log-level)
   ↓
-For each transcript in transcripts/:
+2. Set up logging with custom STANDARD level (25)
+  ↓
+3. Load environment (.env) and configuration (config.yaml)
+  ↓
+4. Environment validation:
+   - check_env_vars() for Azure OpenAI credentials
+   - check_pandoc_installed() for Word document conversion
+   - get_client() to create Azure OpenAI client
+  ↓
+5. Determine paths from CLI args or config defaults:
+   - input_dir (default: 'transcripts')
+   - output_dir (default: 'reports') 
+   - template_path (default: 'AnalysisTemplate.txt')
+  ↓
+6. Load analysis template and ensure reports directory exists
+  ↓
+7. For each transcript in input directory:
     process_all_transcripts()  # (processing/batch_processing.py)
       ↓
-    1. Delete old report files for this transcript (if any)
-        - Removes previous *_analysis.md, *_analysis.docx, *_llm_validation.md
+    A. File Management
+       - Delete old report files for this transcript (if any):
+         * {transcript}_analysis.md
+         * {transcript}_analysis.docx 
+         * {transcript}_llm_validation.md
+       - Show progress bar: Step 0 & 1 (Preparing & Collection)
       ↓
-    2. Transcript Collection
-        - Load .txt transcript from transcripts/ folder
-        - Log step and progress bar (env_utils.py)
+    B. Automated LLM Analysis  # (processing/transcript_processing.py)
+       - Show progress bar: Step 2 (Automated LLM Analysis)
+       - process_transcript():
+         * Load transcript file with error handling
+         * Load prompt templates from prompts/:
+           - initial_analysis.txt
+           - validation.txt  
+           - revision.txt
+           - system.txt
+         * Check token limits (128K context window)
+         * Generate initial analysis using Azure OpenAI
+         * Save actual prompt used to reports/ for auditability
       ↓
-    3. Automated LLM Analysis
-        - process_transcript()  # (processing/transcript_processing.py)
-            * Load analysis template (prompts/initial_analysis.txt)
-            * Prepare prompt with transcript inserted
-            * Call Azure OpenAI (GPT-4) to generate draft report
-            * Save actual prompt to reports/ for auditability
-            * Save draft report as *_analysis.md
+    C. LLM Self-Check & Validation Loop (Up to 5 iterations)
+       - Show progress bar: Step 3 (LLM Self-Check & Validation)
+       - Load validation configuration from config.yaml:
+         * allowed_validation_grades: ["VALID", "VALID (A)", "VALID (B)"]
+       - For each validation pass:
+         * Call Azure OpenAI to validate the report
+         * Save validation prompt and response to reports/
+         * Check if LLM grade matches allowed grades
+         * If valid: STOP (success)
+         * If invalid: Generate revision using revision prompt
+         * Save revision prompt to reports/
+       - Log final outcome: SUCCESS or FAILURE
+       - Save all validation feedback to {transcript}_llm_validation.md
       ↓
-    4. LLM Self-Check & Validation (Practical, Not Perfect)
-        - For up to 5 passes:
-            * Prepare validation prompt (prompts/validation.txt)
-            * Call Azure OpenAI to validate report
-            * Save validation prompt and feedback to reports/
-            * If LLM returns VALID, VALID (A), or VALID (B):
-                - Stop validation loop (success)
-            * Else:
-                - Prepare revision prompt (prompts/revision.txt)
-                - Call Azure OpenAI to revise report
-                - Save revision prompt to reports/
-        - Log each validation pass and result
-        - Add blank line after last pass for separation
-        - Final log: SUCCESS or FAILURE after validation attempts
+    D. Human Review Stage
+       - Show progress bar: Step 4 (Human Review & Approval)
+       - Save final analysis to {transcript}_analysis.md
+       - Log guidance for human review
       ↓
-    5. Human Review & Approval
-        - Log step and progress bar
-        - User reviews *_analysis.md and *_llm_validation.md for accuracy, context, and completeness
-        - Make manual edits if needed
-      ↓
-    6. Finalized, Shareable Report
-        - convert_markdown_to_docx()  # (conversion/output_conversion.py)
-            * Convert *_analysis.md to *_analysis.docx using Pandoc
-        - Log step and progress bar
-        - Save final outputs to reports/
+    E. Output Generation
+       - Show progress bar: Step 5 (Finalized Report)
+       - convert_markdown_to_docx() using Pandoc
+       - Save Word document to {transcript}_analysis.docx
+  ↓
+8. Final completion messages and guidance for human review
 ```
 
 ## Large Transcript Processing
-When a transcript exceeds the token limit (128,000 tokens for GPT-4), the system automatically handles it using transcript_chunking.py:
+When a transcript exceeds the token limit (128,000 tokens for GPT-4o), the system uses transcript_chunking.py:
 
-1. Token Management
-    - Check combined token count (transcript + template)
-    - Account for expected completion tokens
-    - If exceeds limits, trigger chunking process
+**Note**: The current implementation includes chunking logic but the main processing flow checks token limits and aborts if exceeded rather than automatically chunking. The chunking functionality exists for future enhancement.
 
-2. Chunking Process (process_large_transcript)
-    - Split transcript into manageable chunks
+1. **Token Management**
+    - Check combined token count (transcript + template + completion tokens)
+    - MAX_CONTEXT_TOKENS = 128,000 (GPT-4o context window)
+    - MAX_COMPLETION_TOKENS = 16,000
+    - If total exceeds limits, currently aborts with user error
+
+2. **Chunking Process** (process_large_transcript - available but not integrated)
+    - Split transcript into manageable chunks (configurable chunk_size)
     - Preserve context and coherence at chunk boundaries
     - Track chunk sequence (1/N, 2/N, etc.)
 
-3. Per-Chunk Processing
-    - Process each chunk with appropriate context
-    - Include segment markers in prompts
+3. **Per-Chunk Processing**
+    - Process each chunk with segment markers
+    - Include MCEM framework context in system prompts
     - Handle individual chunk failures gracefully
 
-4. Result Consolidation
+4. **Result Consolidation**
     - Combine individual chunk analyses
-    - Run consolidation pass to ensure coherence
+    - Run consolidation pass for coherence
     - Remove redundancies and smooth transitions
     - Return single coherent analysis
 
-5. Error Handling
-    - Individual chunk failures don't stop processing
-    - Fallback to partial results if some chunks succeed
-    - Clear error logging and status tracking
+**Final outputs** (in reports/):
+- `{transcript}_analysis.md` (LLM-generated structured analysis)
+- `{transcript}_analysis.docx` (Word version via Pandoc conversion)
+- `{transcript}_llm_validation.md` (validation feedback log with grades)
+- `{transcript}_initial_prompt.txt` (actual initial analysis prompt used)
+- `{transcript}_revision_prompt_passN.txt` (revision prompts for each failed validation)
+- `{transcript}_validation_prompt_passN.txt` (validation prompts for each check)
 
-Final outputs (in reports/):
-    - {transcript}_analysis.md (LLM-generated structured analysis)
-    - {transcript}_analysis.docx (Word version)
-    - {transcript}_llm_validation.md (validation feedback log)
-    - {transcript}_initial_prompt.txt, _revision_prompt_passN.txt, _validation_prompt_passN.txt (actual prompts used)
-    - Diagnostic logs (console, progress bar, and info logs)
+**Key supporting modules:**
+- `processing/batch_processing.py`: Orchestrates per-transcript workflow, progress tracking, file cleanup
+- `processing/transcript_processing.py`: Handles LLM interactions, validation loop, prompt saving
+- `processing/transcript_chunking.py`: Large transcript handling (available but not integrated)
+- `conversion/output_conversion.py`: Markdown to Word conversion via Pandoc
+- `utils/env_utils.py`: Logging, progress bar, environment validation, error handling
+- `utils/file_utils.py`: File operations, token counting, template loading
+- `utils/config_utils.py`: Configuration loading with environment variable expansion
+- `prompts/`: LLM prompt templates (system.txt, initial_analysis.txt, revision.txt, validation.txt)
 
-Key supporting modules:
-- processing/batch_processing.py: Orchestrates per-transcript workflow, progress bar, and logging
-- processing/transcript_processing.py: Handles LLM prompt construction, validation loop, and prompt/report saving
-- conversion/output_conversion.py: Markdown to Word conversion
-- utils/env_utils.py: Logging, progress bar, environment checks
-- prompts/: All LLM prompt templates (system, initial_analysis, revision, validation)
-- reports/: All outputs, logs, and prompt audit files
-- transcripts/: Input .txt files
+**Configuration & Environment:**
+- `.env`: Azure OpenAI credentials and endpoints
+- `config.yaml`: Processing settings, validation grades, paths
+- CLI arguments: `--input`, `--output`, `--template`, `--log-level`
 
-Auditability & Privacy:
-- All actual LLM/user prompts and validation feedback are saved for each run
-- .gitignore covers transcripts/ and reports/ to prevent accidental publishing of sensitive data
+**Logging & Progress:**
+- Custom STANDARD log level (25) for user-friendly progress
+- Detailed logging at DEBUG/INFO levels for troubleshooting
+- Progress bar showing steps 0-5 for each transcript
+- Success/failure logging for validation outcomes
+
+**Auditability & Privacy:**
+- All actual LLM prompts saved with timestamp and iteration info
+- Validation feedback preserved with grades and reasoning
+- `.gitignore` covers transcripts/ and reports/ directories
+- Configurable validation stopping criteria

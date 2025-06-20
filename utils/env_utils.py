@@ -13,6 +13,13 @@ if not hasattr(logging, 'STANDARD'):
             self._log(STANDARD_LEVEL, message, args, **kws)
     logging.Logger.standard = standard
 
+def log_user_error(message: str, exit_code: int = 1):
+    """
+    Log a user-facing error message and exit. Use for common failures (env, config, file I/O, etc.).
+    """
+    logging.error(f"[USER ERROR] {message}")
+    sys.exit(exit_code)
+
 # TQL-style progress bar for pipeline steps
 PIPELINE_STEPS = [
     "Preparing Analysis",  # Step 0
@@ -41,6 +48,7 @@ def setup_logging(level="STANDARD") -> None:
     Set up logging configuration for the application.
     Logs are output to stdout with the specified level and a standard format.
     If level is STANDARD, suppress INFO messages and use the progress bar for pipeline steps.
+    Adds a [USER ERROR] prefix for user-facing errors.
 
     Args:
         level (str): Logging level as a string (e.g., 'STANDARD', 'DEBUG', 'INFO').

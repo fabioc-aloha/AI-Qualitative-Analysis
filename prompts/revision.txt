@@ -11,6 +11,9 @@ Instructions:
 4. Be clear, thorough, and transparent in your reasoning.
 5. Make the revised report easy to follow for both humans and AI systems.
 
+ANALYSIS TEMPLATE:
+{template}
+
 TRANSCRIPT:
 {transcript}
 

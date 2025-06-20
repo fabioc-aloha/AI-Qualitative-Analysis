@@ -11,5 +11,8 @@ INITIAL ANALYSIS INSTRUCTIONS (For LLM and Human Reviewers)
 9. At the end, add a short **Summary of Insights** section that brings together the most important findings.
 10. Make sure all sections in the template are present and well-formatted, even if some data is missing.
 
+ANALYSIS TEMPLATE:
+{template}
+
 TRANSCRIPT:
 {transcript}

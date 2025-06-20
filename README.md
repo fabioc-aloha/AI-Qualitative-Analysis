@@ -4,10 +4,30 @@
 
 **Version: 1.1.3**
 
-> **Changelog (v1.1.1, June 2025):**
-> - Automatically deletes old report files for each transcript before processing to avoid confusion with previous runs.
-> - Final log message now indicates SUCCESS or FAILURE after validation attempts.
-> - Minor log and output improvements for clarity.
+> **Changelog (v1.1.3, June 2025):**
+> - **Enhanced Error Handling**: Improved user-friendly error messages with guidance for common failures
+> - **Configurable Validation**: Validation stopping cr- Old report files for each transcript are automatically deleted before new analysis to avoid confusion
+- All actual LLM prompts used (with variables filled in) are saved for each run in the `reports/` directory for full auditability
+- Generated files include: `{transcript}_analysis.md`, `{transcript}_analysis.docx`, `{transcript}_llm_validation.md`, and all prompt files
+
+**Configurable Validation:**
+- Validation loop stopping criteria are configurable via `config.yaml` (`allowed_validation_grades`)
+- Default allowed grades: `["VALID", "VALID (A)", "VALID (B)"]` - easily customizable for your quality standards
+- The LLM's grade (e.g., VALID, VALID (A), etc.) is logged in the validation feedback for full transparency
+- Up to 5 validation iterations before marking as failed
+
+**Error Handling & User Guidance:**
+- All config options are validated at startup with clear error messages for missing/invalid settings
+- User-friendly error messages with guidance for common failures (missing files, environment issues, API errors)
+- Standardized logging levels across all modules for consistent experience
+- Graceful handling of file I/O, LLM API calls, and template loading errorsa now configurable via `config.yaml`
+> - **Prompt Consistency**: All prompt templates audited and context injection standardized
+> - **Comprehensive Testing**: Expanded test coverage for core functionality and error handling
+> - **Standardized Logging**: Consistent log levels and messaging across all modules
+> - **Enhanced Documentation**: Added prompt customization guide and configuration validation
+> - Automatically deletes old report files for each transcript before processing to avoid confusion with previous runs
+> - Final log message now indicates SUCCESS or FAILURE after validation attempts
+> - All LLM grades (VALID, VALID (A), etc.) logged in validation feedback for transparency
 
 Easily turn your qualitative customer interviews and survey transcripts into actionable, structured reports—powered by Azure OpenAI's large language models (LLMs) and the Microsoft Customer Engagement Model (MCEM).
 
@@ -124,10 +144,34 @@ The script uses your chosen template to ensure every report is complete, consist
    - Check `AnalysisTemplate.txt` for the analysis structure
    - Adjust settings as needed for your use case
 
-6. **Run the analysis:**
-   ```bash
-   python main.py
-   ```
+## Command Line Usage
+
+The tool supports flexible command-line options for custom workflows:
+
+```bash
+# Basic usage with defaults
+python main.py
+
+# Custom input/output directories
+python main.py --input ./my-transcripts --output ./my-reports
+
+# Use different template
+python main.py --template ./custom-template.txt
+
+# Adjust logging verbosity
+python main.py --log-level DEBUG    # Detailed debugging info
+python main.py --log-level STANDARD # User-friendly progress (default)
+python main.py --log-level ERROR    # Only errors
+
+# Combined options
+python main.py --input ./interviews --output ./analyses --template MCEM-Custom.txt --log-level INFO
+```
+
+**Available Options:**
+- `--input, -i`: Input folder containing transcript .txt files (default: transcripts/)
+- `--output, -o`: Output folder for reports (default: reports/)  
+- `--template, -t`: Template file for analysis (default: from config or AnalysisTemplate.txt)
+- `--log-level`: Logging verbosity - STANDARD, DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 7. **Access your reports:**
    - Find generated reports in the `reports/` folder
@@ -137,7 +181,26 @@ The script uses your chosen template to ensure every report is complete, consist
    - For each transcript, the actual LLM prompts used (with variables filled in) are also saved in the `reports/` folder for troubleshooting and auditability.
    - Review the reports for accuracy and completeness
 
-## Environment Variables
+## Configuration Options
+
+All configuration options are validated at startup and documented below:
+
+### config.yaml Settings
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `processing.chunk_size` | Maximum tokens per chunk for large transcripts | 80000 |
+| `processing.max_completion_tokens` | Maximum tokens for LLM responses | 16000 |
+| `processing.template_path` | Path to analysis template file | "AnalysisTemplate.txt" |
+| `processing.input_dir` | Default input directory for transcripts | "transcripts" |
+| `processing.output_dir` | Default output directory for reports | "reports" |
+| `processing.allowed_validation_grades` | LLM grades that stop validation loop | ["VALID", "VALID (A)", "VALID (B)"] |
+| `processing.output_format` | Output formats to generate | ["md", "docx"] |
+| `processing.summary_report` | Generate summary across all transcripts | true |
+| `processing.log_to_file` | Save logs to file | false |
+| `processing.log_file_path` | Log file location if enabled | "logs/processing.log" |
+
+### Environment Variables
 
 The following environment variables must be set in your `.env` file:
 
@@ -157,6 +220,22 @@ AZURE_OPENAI_API_VERSION=your_api_version
 ```
 
 For more details, see the [Azure OpenAI documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/overview) on how to obtain these values and set up your resource.
+
+## Configuration Options
+
+All configuration is managed via `config.yaml` and environment variables. Key options:
+
+- `processing.template_path`: Path to the analysis template file (default: `AnalysisTemplate.txt`).
+- `processing.chunk_size`: Max tokens per chunk for large transcripts.
+- `processing.max_completion_tokens`: Max tokens for LLM completions.
+- `processing.output_format`: Output formats (e.g., `["md", "docx"]`).
+- `processing.summary_report`: Whether to generate a summary report (true/false).
+- `processing.allowed_validation_grades`: List of LLM validation grades that are accepted as "valid" (e.g., `["VALID", "VALID (A)", "VALID (B)"]`).
+- `processing.log_to_file`: Enable/disable logging to file.
+- `processing.log_file_path`: Path to log file if enabled.
+- `log-level` (CLI): Logging level (`STANDARD`, `DEBUG`, `INFO`, etc.).
+
+All config options are validated at startup. If a required option is missing or invalid, the application will log a user-facing error and exit.
 
 ## Process Flow & Validation (LLM + Human-in-the-Loop)
 
@@ -217,6 +296,27 @@ The pipeline uses external prompt templates stored in the `prompts/` folder. Eac
 
 All prompt templates are fully externalized for transparency and easy customization. The actual prompts used (with variables filled in) are saved to the `reports/` folder for troubleshooting and auditability.
 
+## Prompt Customization
+
+You can fully customize the prompts used for LLM analysis, revision, and validation by editing the files in the `prompts/` directory:
+- `initial_analysis.txt`: Main analysis prompt. Uses `{template}` and `{transcript}` placeholders.
+- `revision.txt`: Used for LLM-driven report revision. Uses `{template}`, `{transcript}`, `{prev_report}`, and `{issues}` placeholders.
+- `validation.txt`: Used for LLM self-check/validation. Uses `{transcript}` and `{report}` placeholders.
+- `system.txt`: System prompt for LLM role/context.
+
+**Best Practices:**
+- Always include `{template}` in prompts where the LLM should reference the full analysis template.
+- Use clear, explicit instructions and section headings in your prompts.
+- Test prompt changes on a sample transcript before running batch jobs.
+
+## File Management & Validation Features
+
+- Old report files for each transcript are automatically deleted before new analysis to avoid confusion.
+- All actual LLM/user prompts and validation feedback are saved for each run in the `reports/` directory for auditability.
+- Validation loop stopping criteria are configurable via `config.yaml` (`allowed_validation_grades`).
+- The LLM’s grade (e.g., VALID, VALID (A), etc.) is logged in the validation feedback for transparency.
+- All config options are validated at startup; user-facing errors are logged for missing/invalid options.
+
 ## Configuration & Customization
 - **Analysis Framework:** While the default template uses MCEM (Microsoft Customer Engagement Model), you can customize `AnalysisTemplate.txt` to align with any business framework:
   - Sales methodologies (SPIN, Challenger, etc.)
@@ -269,10 +369,48 @@ A: You can:
 3. Document common issues in `LEARNINGS.md`
 4. File an issue if you find systematic problems
 
+## Troubleshooting
+
+**Common Issues and Solutions:**
+
+**Environment Setup:**
+- `Environment variable missing`: Check your `.env` file contains all required Azure OpenAI variables
+- `Azure OpenAI API error`: Verify your API key, endpoint, and deployment name are correct
+- `Pandoc not found`: Install Pandoc for Word document conversion: https://pandoc.org/installing.html
+
+**File and Configuration:**
+- `Template file not found`: Check the `template_path` in `config.yaml` points to an existing file
+- `No transcripts found`: Ensure `.txt` files are in the correct input directory (default: `transcripts/`)
+- `Config validation error`: Review `config.yaml` syntax and ensure all required fields are present
+
+**Processing Issues:**
+- `Token limit exceeded`: Large transcripts currently abort processing - consider splitting files manually
+- `Validation loop fails`: Check the `allowed_validation_grades` in `config.yaml` match your LLM's response format
+- `Analysis quality issues`: Review and customize prompt templates in the `prompts/` directory
+
+**Debugging:**
+- Use `--log-level DEBUG` for detailed processing information
+- Check the generated prompt files in `reports/` to verify correct variable substitution
+- Review validation feedback in `{transcript}_llm_validation.md` files
+
+**Getting Help:**
+- All actual prompts used are saved in `reports/` for debugging
+- Error messages include specific guidance for resolution
+- See `LEARNINGS.md` for implementation insights and common patterns
+
 ## Support & Best Practices
-- Follows Microsoft Azure and MCEM best practices
-- See `DECISIONS.md` for architectural choices
-- See `LEARNINGS.md` for implementation insights and lessons
+
+**Project Documentation:**
+- See `DECISIONS.md` for architectural choices and design rationale
+- See `LEARNINGS.md` for implementation insights, optimizations, and lessons learned
+- See `improvements.md` for completed enhancements and code review tracking
+- See `flow.md` for detailed processing pipeline diagrams and step-by-step flow
+
+**Best Practices:**
+- Follows Microsoft Azure development and deployment best practices
+- Uses Azure OpenAI responsibly with validation and human oversight
+- Implements MCEM framework for structured business analysis
+- Maintains full auditability with saved prompts and validation feedback
 
 ---
 

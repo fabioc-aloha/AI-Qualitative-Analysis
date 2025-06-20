@@ -37,11 +37,11 @@ def mock_dependencies():
 
 def test_main_success(mock_dependencies):
     """Test successful execution of the main function"""
+    import sys
     from main import main
-
-    # Run the main function
-    main()
-
+    # Patch sys.argv so argparse doesn't see pytest args
+    with patch.object(sys, 'argv', ['main.py']):
+        main()
     # Verify all dependencies were called
     mock_dependencies['load_dotenv'].assert_called_once()
     mock_dependencies['load_config'].assert_called_once()
@@ -58,19 +58,21 @@ def test_main_success(mock_dependencies):
     mock_dependencies['process_all'].assert_called_once_with(
         mock_dependencies['get_client'].return_value,
         mock_dependencies['load_template'].return_value,
-        mock_dependencies['ensure_reports_dir'].return_value
+        mock_dependencies['ensure_reports_dir'].return_value,
+        input_dir='transcripts',
+        template_path='AnalysisTemplate.txt'
     )
 
 
 def test_main_config_missing_template_path(mock_dependencies):
     """Test main function when template_path is missing from config"""
+    import sys
     from main import main
-
     # Set up config without template_path
     mock_dependencies['load_config'].return_value = {'processing': {}}
-
-    # Run the main function
-    main()
+    # Patch sys.argv so argparse doesn't see pytest args
+    with patch.object(sys, 'argv', ['main.py']):
+        main()
 
     # Verify default template path is used
     mock_dependencies['load_template'].assert_called_once_with('AnalysisTemplate.txt')
@@ -78,14 +80,16 @@ def test_main_config_missing_template_path(mock_dependencies):
 
 def test_main_env_vars_missing(mock_dependencies):
     """Test main function when environment variables are missing"""
+    import sys
     from main import main
 
     # Make check_env_vars raise SystemExit
     mock_dependencies['check_env_vars'].side_effect = SystemExit(1)
 
     # Run the main function and expect it to exit
-    with pytest.raises(SystemExit):
-        main()
+    with patch.object(sys, 'argv', ['main.py']):
+        with pytest.raises(SystemExit):
+            main()
 
     # Verify we checked env vars but didn't proceed further
     mock_dependencies['check_env_vars'].assert_called_once()
@@ -94,14 +98,16 @@ def test_main_env_vars_missing(mock_dependencies):
 
 def test_main_pandoc_missing(mock_dependencies):
     """Test main function when Pandoc is not installed"""
+    import sys
     from main import main
 
     # Make check_pandoc_installed raise SystemExit
     mock_dependencies['check_pandoc'].side_effect = SystemExit(1)
 
     # Run the main function and expect it to exit
-    with pytest.raises(SystemExit):
-        main()
+    with patch.object(sys, 'argv', ['main.py']):
+        with pytest.raises(SystemExit):
+            main()
 
     # Verify we checked for Pandoc but didn't proceed further
     mock_dependencies['check_pandoc'].assert_called_once()

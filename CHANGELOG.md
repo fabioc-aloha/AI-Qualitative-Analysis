@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.3] - 2025-06-20
+### Enhanced
+- **Prompt Consistency**: Audited all prompt templates for correct placeholder usage and standardized context injection
+- **Error Handling**: Improved user-friendly error messages with guidance for common failures (missing files, API errors, configuration issues)
+- **Configurable Validation**: Validation stopping criteria now fully configurable via `config.yaml` with `allowed_validation_grades`
+- **Logging Standards**: Standardized log levels and messaging across all modules for consistent user experience
+- **Configuration Validation**: All config options validated at startup with clear error messages for missing/invalid settings
+
+### Added
+- **Comprehensive Testing**: Expanded test coverage for file management, error handling, utilities, and core functionality
+- **Enhanced Documentation**: Added detailed prompt customization guide and configuration reference
+- **Command Line Flexibility**: Full CLI argument support for input/output directories, templates, and log levels
+- **Grade Transparency**: All LLM validation grades logged with detailed feedback for auditability
+
+### Fixed
+- Improved exception handling for file I/O, LLM API calls, and template loading
+- Better user guidance for environment setup and common configuration issues
+
 ## [1.1.1] - 2025-06-06
 ### Added
 - Automatically deletes old report files for each transcript before processing to avoid confusion with previous runs.

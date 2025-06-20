@@ -17,3 +17,7 @@ processing:
   dry_run: false
   log_to_file: false
   log_file_path: "logs/processing.log"
+  allowed_validation_grades:
+    - VALID
+    - VALID (A)
+    - VALID (B)
