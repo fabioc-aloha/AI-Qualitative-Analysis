@@ -6,21 +6,7 @@
 
 > **Changelog (v1.1.3, June 2025):**
 > - **Enhanced Error Handling**: Improved user-friendly error messages with guidance for common failures
-> - **Configurable Validation**: Validation stopping cr- Old report files for each transcript are automatically deleted before new analysis to avoid confusion
-- All actual LLM prompts used (with variables filled in) are saved for each run in the `reports/` directory for full auditability
-- Generated files include: `{transcript}_analysis.md`, `{transcript}_analysis.docx`, `{transcript}_llm_validation.md`, and all prompt files
-
-**Configurable Validation:**
-- Validation loop stopping criteria are configurable via `config.yaml` (`allowed_validation_grades`)
-- Default allowed grades: `["VALID", "VALID (A)", "VALID (B)"]` - easily customizable for your quality standards
-- The LLM's grade (e.g., VALID, VALID (A), etc.) is logged in the validation feedback for full transparency
-- Up to 5 validation iterations before marking as failed
-
-**Error Handling & User Guidance:**
-- All config options are validated at startup with clear error messages for missing/invalid settings
-- User-friendly error messages with guidance for common failures (missing files, environment issues, API errors)
-- Standardized logging levels across all modules for consistent experience
-- Graceful handling of file I/O, LLM API calls, and template loading errorsa now configurable via `config.yaml`
+> - **Configurable Validation**: Validation stopping criteria now configurable via `config.yaml`
 > - **Prompt Consistency**: All prompt templates audited and context injection standardized
 > - **Comprehensive Testing**: Expanded test coverage for core functionality and error handling
 > - **Standardized Logging**: Consistent log levels and messaging across all modules
